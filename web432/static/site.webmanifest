@@ -1,0 +1,16 @@
+{
+    "name": "432Hz",
+    "short_name": "432Hz",
+    "description": "Associação 432Hz App",
+    "icons": [
+      {
+        "src": "images/logo-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#9cc1d9"
+  }

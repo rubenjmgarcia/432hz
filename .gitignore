@@ -1,0 +1,4 @@
+#ignore files
+432venv
+__pycache__
+codes.txt

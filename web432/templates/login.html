@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt">
+	<head>
+		<meta charset="UTF-8">
+		<title>Login | 432Hz</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- tab icon -->
+		<link rel="icon" type="image/png" sizes="64x64" href="static/images/favicon-16x16.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon-16x16.png">
+
+		<!-- Bootstrap -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+		
+		<meta name="theme-color" content="#ffffff">
+
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="/static/stylesheets/login.css">
+	</head>
+		<body class="bg-dark">
+			<div class="modal fade" id="loading" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered text-center">
+							<div class="row m-0 text-center">
+									<div class="col-12 mb-2">
+											<svg version="1.1" id="clock" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+													<circle fill="none" stroke="#fff" stroke-width="4" stroke-miterlimit="10" cx="50" cy="50" r="48"></circle>
+													<line fill="none" stroke-linecap="round" stroke="#fff" stroke-width="4" stroke-miterlimit="10" x1="50" y1="50" x2="85" y2="50.5">
+															<animateTransform attributeName="transform" dur="2s" type="rotate" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
+													</line>
+													<line fill="none" stroke-linecap="round" stroke="#fff" stroke-width="4" stroke-miterlimit="10" x1="50" y1="50" x2="49.5" y2="74">
+															<animateTransform attributeName="transform" dur="10s" type="rotate" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
+													</line>
+											</svg>
+									</div>
+									<div class="col-12 mt-4">
+											<h4 style="-webkit-filter: drop-shadow(2px 2px 5px #000);filter: drop-shadow(2px 2px 5px #000);" class="text-white m-0 p-0">Por favor, aguarde...</h4>
+									</div>
+							</div>
+					</div>
+			</div>
+			
+			<div class="modal fade" id="lol" tabindex="-1" aria-labelledby="label" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+									<div class="modal-header">
+											<h5 class="modal-title" id="label">Esqueceu-se da palavra-passe?</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+													<span aria-hidden="true">×</span>
+											</button>
+									</div>
+									<div class="modal-body">
+											<p>Caso não se lembre da palavra-passe da sua conta de administração, siga os seguintes passos:</p>
+											<ul>
+													<li><span class="font-weight-semibold">Passo 1:</span> Não entre em pânico!</li>
+													<li><span class="font-weight-semibold">Passo 2:</span> Respire fundo e acalme-se.</li>
+													<li><span class="font-weight-semibold">Passo 3:</span> Tente lembrar-se da sua palavra-passe.</li>
+													<li><span class="font-weight-semibold">Passo 4:</span> Tente iniciar sessão novamente.</li>
+											</ul>
+									</div>
+									<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Obrigado</button>
+									</div>
+							</div>
+					</div>
+			</div>
+			
+			<div class="container">
+					<div class="text-center">
+							<h2 style="-webkit-filter: drop-shadow(5px 5px 5px #222);filter: drop-shadow(5px 5px 5px #222);" class="pt-4 pb-2 text-white">Área de Administração</h2>
+							<img id="logo" alt="logo" width="240" style="-webkit-filter: drop-shadow(5px 5px 5px #222);filter: drop-shadow(5px 5px 5px #222);" src="/static/images/logo.png" class="img-fluid pb-4">
+					</div>
+				
+					<div class="card card-login mx-auto mt-1 mb-3" style="-webkit-filter: drop-shadow(1px 1px 5px #222);filter: drop-shadow(1px 1px 5px #222);">
+							<div class="card-header">Introduza as suas credenciais de acesso:</div>
+							<div class="card-body">
+								{% with messages = get_flashed_messages() %}
+								{% if messages %}
+									<ul class=flashes>
+									{% for message in messages %}
+									<li>{{ message }}</li>
+									{% endfor %}
+									</ul>
+								{% endif %}
+								{% endwith %}
+								{% block main %}{% endblock %}								
+									<form id="login-form" method="post">
+											<div class="form-group">
+													<div class="form-label-group">
+															<input id="inputEmail" class="form-control" title="Insira o seu nome de utilizador" placeholder="Nome de utilizador" name="username" type="text" autocomplete="on" required="">
+															<label for="inputEmail">Nome de utilizador</label>
+													</div>
+											</div>
+											<div class="form-group">
+													<div class="form-label-group">
+															<input id="inputPassword" class="form-control" title="Insira a sua palavra-passe" placeholder="Palavra-passe" name="password" type="password" autocomplete="on" required="">
+															<label for="inputPassword">Palavra-passe</label>
+													</div>
+											</div>
+											<div class="form-group">
+													<div class="custom-control custom-checkbox ml-1">
+															<input type="checkbox" id="keep-login" name="session" value="" class="custom-control-input">
+															<label class="custom-control-label text-justify pl-1" for="keep-login">
+																	Manter sessão iniciada
+															</label>
+													</div>
+											</div>
+										
+											<button type="submit" class="btn btn-secondary btn-block" value="Submit"><i class="fas fa-sign-in-alt"></i> Iniciar sessão</button>
+									</form>
+							</div>
+					</div>
+			</div>
+			
+		<!-- Scripts -->
+
+		<!-- Bootstrap-->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+		<script>
+			$(document).ready(function () {
+				$('#loading').modal('hide'); // Hide the loading modal initially
+
+				$('#login-form').submit(function (event) {
+					$('#loading').modal('show'); // Show the loading modal on form submission
+				});
+			});
+		</script>
+
+		<script src="static/scripts/global.js"></script>
+		<script src="/admin/vendor/jquery/jquery.min.js"></script>
+		<script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+		<script>
+				$('#login-form').submit(function(event){
+						$('#loading').modal('show');
+				});
+		</script>
+	</body>
+</html>

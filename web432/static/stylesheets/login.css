@@ -1,0 +1,5 @@
+/* Set max-width for the login form */
+.card-login {
+    max-width: 400px; /* Adjust the value as needed */
+    margin: 0 auto; /* Center the form horizontally */
+}

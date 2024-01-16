@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Administração | 432Hz
+{% endblock %}
+
+{% block pagecss %}
+    <link rel="stylesheet" href="/static/stylesheets/admin.css">
+{% endblock %}
+
+{% block main %}
+<h3>Admin Dashboard</h3>
+
+<h5>Create New User</h5>
+<form action="{{ url_for('create_user') }}" method="post">
+    {{ create_user_form.csrf_token }}
+    {{ create_user_form.new_username.label }} {{ create_user_form.new_username }}
+    {{ create_user_form.new_name.label }} {{ create_user_form.new_name }}
+    {{ create_user_form.new_email.label }} {{ create_user_form.new_email }}
+    {{ create_user_form.new_phone.label }} {{ create_user_form.new_phone }}
+    <button type="submit">Create User</button>
+</form>
+
+<h5>User Management</h5>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Change Photo</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td><img src="{{ url_for('serve_image', subpath=user.photo.split('/')[0] if user.photo else '', filename=user.photo.split('/')[-1] if user.photo else '') }}" loading="lazy" alt="" width="80" height="80" class="avatar mr-4"></td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    <!-- Change User Photo -->
+                    <form action="{{ url_for('upload_profile_pic', user_id=user.id) }}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <input type="file" name="file">
+                        <button type="submit">Change Picture</button>
+                    </form>
+                </td>
+                <td>
+                    <!-- Actions -->
+                    <!-- Delete User -->
+                    <form action="{{ url_for('delete_user', user_id=user.id) }}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                    <!-- Reset Password -->
+                    <form action="{{ url_for('reset_password') }}" method="post">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button type="submit">Reset Password</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8">
+                    <!-- Update User Info -->
+                    <form action="{{ url_for('edit_user_route', user_id=user.id) }}" method="post">
+                        {{ edit_user_form.csrf_token }}
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        {{ edit_user_form.username.label }} <input type="text" name="username" value="{{ user.username }}" required>
+                        {{ edit_user_form.name.label }} <input type="text" name="name" value="{{ user.name }}" required>
+                        {{ edit_user_form.email.label }} <input type="email" name="email" value="{{ user.email }}" required>
+                        {{ edit_user_form.phone.label }} <input type="tel" name="phone" value="{{ user.phone }}" required>
+                        {{ edit_user_form.role.label }} 
+                        <select name="role">
+                            <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+                            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                        </select>
+                    
+                        <button type="submit">Update</button>
+                    </form>
+                    
+                    
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

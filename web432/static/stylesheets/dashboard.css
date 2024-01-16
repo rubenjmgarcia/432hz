@@ -1,0 +1,24 @@
+.password-change-form {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.password-change-form form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.password-change-form label {
+    margin-bottom: 5px;
+}
+
+.password-change-form input {
+    margin-bottom: 15px;
+    padding: 8px;
+}
+
+.password-change-form button {
+    padding: 10px;
+}

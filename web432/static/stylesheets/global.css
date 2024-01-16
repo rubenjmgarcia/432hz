@@ -1,0 +1,95 @@
+@charset "UTF-8";
+
+/*************GLOBAL*****************/
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+
+/*************HEADER*****************/
+header {
+    padding: 0 15px;
+    background-color: rgb(255, 255, 255);
+}
+
+/*************NAVBAR*****************/
+.navbar {
+    margin: 0 10%;
+    background: transparent !important;
+}
+
+.dropdown-menu {
+    background-color: rgb(255, 255, 255) !important;
+    width: auto !important;
+}
+
+.navbar-collapse {
+    justify-content: end;
+}
+
+.navbar-nav {
+    text-align: right;
+    margin: 10px auto;
+}
+
+.dropdown-menu {
+    background: transparent;
+    text-align: center;
+    width: 100%;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+@media (max-width: 400px) {
+    .navbar {
+        margin: 0;
+    }
+}
+
+/* Custom styles for the dropdown menu */
+.navbar-nav .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, 0) scaleY(1);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+/* Center the dropdown menu */
+.dropdown-menu {
+    margin-top: 0;
+    transform: translate(-50%, 0);
+    left: 50%;
+    display: none; /* Hide the dropdown by default */
+    position: absolute;
+    top: 100%; /* Position it below the trigger */
+    opacity: 0;
+    transform-origin: top center;
+}
+
+/* Show the dropdown with a fade-in animation */
+.navbar-nav .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/*************FOOTER*****************/
+footer {
+    background-color: grey;
+}
+
+.social-icon-small {
+    color: white;
+    margin-top: 0;
+    font-size: 20px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    line-height: 36px;
+}

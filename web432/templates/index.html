@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    432Hz
+{% endblock %}
+
+{% block pagecss %}
+  <link rel="stylesheet" href="/static/stylesheets/index.css">
+{% endblock %}
+
+{% block main %}
+  <section id="section1" class="logo">
+    <h3>{{ _('Welcome to our website!') }}</h3>
+    {{ _('Current Language: ') + session['lang'] }}
+    <img src="static/images/logo.png" width="100%">
+  </section>
+
+  <section id="section2" class="row instagram-widget-container">
+    <article class="col-12 col-lg-6 col-md-6 col-sm-6 pl-0 pr-4">
+      <!-- LightWidget WIDGET -->
+      <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
+      <iframe loading="lazy" src="//lightwidget.com/widgets/a98f7c8397bf593aba5bb0bc062097a7.html" title="Feed do Instagram" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width: 100%; border: 0px; overflow: hidden; height: 386px;"></iframe>
+    </article>
+    <article class="col-12 col-lg-6 col-md-6 col-sm-6 mt-3 pl-0 justify-content-center align-self-center">
+      <p class="header2">Encontra-nos no Instagram</p>
+      <p class="font-weight-light">Está a par daquilo que andamos a fazer! Segue-nos para acompanhares os nossos projetos.</p>
+      <a href="/instagram" target="_blank" rel="nofollow noopener"><button class="bg-vermelho text-white font-weight-light text-uppercase junta-te" fdprocessedid="499zwa">Instagram</button></a>
+    </article>
+  </section>
+
+
+{% endblock %}

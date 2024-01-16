@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="author" content="Associação 432Hz">
+		<meta name="description" content="Associação 432Hz é uma associação que visa ligar a arte e a ciência é comunidade.">
+		<meta name="keywords" content="432hz, associação, associação432hz, arte, ciência, art, science">
+		<title>{% block title %}{% endblock %}</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<!-- tab icon -->
+		<link rel="icon" type="image/png" sizes="64x64" href="static/images/favicon-16x16.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon-16x16.png">
+
+		<!-- Website Manifest -->
+		<link rel="manifest" href="static/site.webmanifest">
+
+		<!-- Bootstrap -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+		
+		<meta name="theme-color" content="#ffffff">
+
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="/static/stylesheets/global.css">
+		{% block pagecss %}{% endblock %}
+	</head>
+	<body>
+		<header>
+				<!-- Navbar -->
+				<nav class="navbar navbar-expand-md bg-body-tertiary">
+					<div class="container-fluid">
+							<a class="navbar-brand" href="/" title="Página inicial">
+								<img src="/static/images/logo.png" width="72" height="72" alt="logo" class="logo">
+								<span class="text-432hz">432Hz</span>
+							</a>
+							<button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+								<span class="navbar-toggler-icon"></span>
+							</button>
+							<div class="collapse navbar-collapse" id="navbarSupportedContent">
+								<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+									<li class="nav-item">
+										<a class="nav-link" href="/about">SOBRE NÓS</a>
+									</li>
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown">
+											PROJECTOS
+										</a>
+											<ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdown">
+												<li><a class="dropdown-item" href="#">PROJECTO 432HZ</a></li>
+												<li><a class="dropdown-item" href="#">APRENDER BALEIES</a></li>
+												<li><hr class="dropdown-divider"></li>
+												<li><a class="dropdown-item" href="#">TODOS OS PROJECTOS</a></li>
+											</ul>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="/contacts">CONTACTOS</a>
+									</li>
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown">
+											PT | EN
+										</a>
+											<ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdown">
+												<li><a class="dropdown-item" href="{{ url_for('set_locale', lang='pt') }}">PT</a></li>
+												<li><a class="dropdown-item" href="{{ url_for('set_locale', lang='en') }}">EN</a></li>
+											</ul>
+									</li>
+
+									{% if current_user.is_authenticated %}
+										<li class="nav-item dropdown">
+											<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown">
+												ADMIN
+											</a>
+												<ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdown">
+													<li><a class="dropdown-item" href="/dashboard">DASHBOARD</a></li>
+													<li><a class="dropdown-item" href="/createnews">CRIAR NOTICIA</a></li>
+													<li><a class="dropdown-item" href="/createproject">CRIAR PROJECTO</a></li>
+													{% if current_user.role == 'admin' %}
+														<li><hr class="dropdown-divider"></li>
+														<li><a class="dropdown-item" href="/admin">ADMIN AREA</a></li>
+													{% endif %}
+													<li><hr class="dropdown-divider"></li>
+													<li><a class="dropdown-item" href="/logout">SAIR</a></li>
+												</ul>
+										</li>
+									{% endif %}
+							</ul>
+					</div>
+				</div>
+			</nav>							
+		</header>
+		<main>
+			{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<ul class=flashes>
+				{% for message in messages %}
+				<li>{{ message }}</li>
+				{% endfor %}
+				</ul>
+			{% endif %}
+			{% endwith %}
+			{% block main %}{% endblock %}
+		</main>
+		<footer>
+			<section>
+				
+				<div class="position-relative text-center pb-1" style="top: 2rem; z-index: 1001;">
+					<a href="#" id="go-to-top" data-toggle="tooltip" data-placement="bottom" title="Voltar para o topo">
+						<span class="bg-cinzento4 rounded-circle d-inline-block" style="font-size: 1.5rem; line-height: 2.5rem; width: 3rem; height: 3rem;">
+							<i class="fas fa-chevron-up"></i>
+						</span>
+					</a>
+				</div>
+
+				<div class="col-md-8 mb-2 text-md-right">
+					<!-- espaço extra eliminar depois-->
+					<p></br></p>
+					<p class="text-uppercase font-weight-bold mb-1">
+						<a href="/">Sobre Nós</a> | <a href="/">Projetos</a> | <a href="/partners">Parceiros</a> | <a href="/contacts">Contactos</a>
+					</p>
+					<p class="mb-2">Rua dos Foros Nº3 1ºDto. | 9500-059 Ponta Delgada</p>
+				</div>
+
+				<div class="col-md-8 mb-2 text-md-right">
+					<a class="social-media transition" title="Facebook" href="/facebook" target="_blank" rel="nofollow noopener"><i class="fab fa-facebook-f fa-fw social-icon social-icon-small"></i></a>
+					<a class="social-media transition ml-1" title="Instagram" href="/instagram" target="_blank" rel="nofollow noopener"><i class="fab fa-instagram fa-fw social-icon social-icon-small"></i></a>
+					<a class="social-media transition ml-1" title="Email" href="/email"><i class="fas fa-envelope fa-fw social-icon social-icon-small"></i></a>
+				</div>
+			</section>
+			
+			<section class="container-fluid bg-cinzento4 pt-3 text-center">
+				<div class="row justify-content-center align-items-end margin-left-1 text-black">
+						<div class="col-md-4 text-lg-left text-uppercase font-weight-light">
+								<p class="copyright" title="Design:&#010;Mónica Reis&#010;&#010;Web Dev:&#010;Rúben Garcia">&copy; 2024 Associação 432Hz</p>
+						</div>
+				</div>
+		</section>
+		</footer>
+
+		<!-- Scripts -->
+
+		<!-- Bootstrap-->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+		<script src="static/scripts/global.js"></script>
+	</body>
+</html>
