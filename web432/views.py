@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 from functools import wraps
 from web432.models import User
 from web432.database import db
-from web432.forms import EditUserForm, CreateUserForm, ChangePasswordForm  
+from web432.forms import EditUserForm, CreateUserForm, ChangePasswordForm, NewsForm
 import os
 import secrets
 
@@ -238,15 +238,20 @@ def register_routes(app, role_required):
 
         return render_template('dashboard.html', users=users, change_password_form=change_password_form)
 
-    @app.route("/createnews")
+    @app.route("/create_news")
     @login_required
-    def createnews():
-        return render_template("createnews.html")
+    def create_news():
+        form = NewsForm()
+        if form.validate_on_submit():
+            # Process the form data and save the news post
+            flash('News post created successfully!', 'success')
+            return redirect(url_for('dashboard'))
+        return render_template('create_news.html', form=form)
 
-    @app.route("/createproject")
+    @app.route("/create_project")
     @login_required
-    def createproject():
-        return render_template("createproject.html")
+    def create_project():
+        return render_template("create_project.html")
 
     @app.route('/setlocale/<lang>')
     def set_locale(lang):

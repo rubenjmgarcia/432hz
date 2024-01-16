@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Noticias | 432Hz
+{% endblock %}
+
+{% block pagecss %}
+  <link rel="stylesheet" href="/static/stylesheets/dashboard.css">
+{% endblock %}
+
+{% block main %}
+	{% if current_user.is_authenticated %}
+	<p>Olá, {{ current_user.name }}!</p>
+	{% else %}
+	<p>Olá, Visitante!</p>
+	{% endif %}
+{% endblock %}

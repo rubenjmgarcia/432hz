@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Criar Noticia | 432Hz
+{% endblock %}
+
+{% block pagecss %}
+  <link rel="stylesheet" href="/static/stylesheets/dashboard.css">
+{% endblock %}
+
+{% block main %}
+	<div class="container" style="width: 75%;">
+		<h2 class="text-center">Create News Post</h2>
+		<form method="POST" enctype="multipart/form-data">
+		{{ form.hidden_tag() }}
+
+		<div class="form-group">
+			<label class="form-label">{{ form.news_url.label }}</label>
+			{{ form.news_url() }}
+		</div>
+
+		<div class="form-group">
+			<label class="form-label">{{ form.title_pt.label }}</label>
+			{{ form.title_pt() }}
+		</div>
+
+		<div class="form-group">
+			<label class="form-label">{{ form.title_en.label }}</label>
+			{{ form.title_en() }}
+		</div>
+
+		<div class="form-group">
+			<label class="form-label">{{ form.summary_pt.label }}</label>
+			{{ form.summary_pt() }}
+		</div>
+
+		<div class="form-group">
+			<label class="form-label">{{ form.summary_en.label }}</label>
+			{{ form.summary_en() }}
+		</div>
+
+		<div class="form-group">
+			<label class="form-label">{{ form.news_cover_image.label }}</label>
+			{{ form.news_cover_image() }}
+		</div>
+
+		<h3 class="mt-4">Image Uploads</h3>
+		<div>
+			{% for i in range(form.image_uploads|length) %}
+			{% set photo_form = form.image_uploads[i] %}
+			<div class="form-group">
+				<label class="form-label">{{ photo_form.photo.label }} {{ i + 1 }}</label>
+				{{ photo_form.photo() }}
+			</div>
+
+			<div class="form-group">
+				<label class="form-label">{{ photo_form.photographer_name.label }} {{ i + 1 }}</label>
+				{{ photo_form.photographer_name() }}
+			</div>
+			{% endfor %}
+		</div>
+
+
+		<div class="form-group">
+			<label class="form-label">{{ form.news_text_pt.label }}</label>
+			{{ form.news_text_pt() }}
+		</div>
+
+		<div class="form-group">
+			<label class="form-label">{{ form.news_text_en.label }}</label>
+			{{ form.news_text_en() }}
+		</div>
+
+		<div class="form-group">
+			<label class="form-label">{{ form.category.label }}</label>
+			{{ form.category() }}
+		</div>
+
+		<div class="form-group">
+			<label class="form-label">{{ form.date.label }}</label>
+			{{ form.date() }}
+		</div>
+
+		{{ form.submit() }}
+		</form>
+
+		<script>
+			// CKEditor for the text areas
+			CKEDITOR.replace('summary_pt');
+    		CKEDITOR.replace('summary_en');
+			CKEDITOR.replace('news_text_pt');
+			CKEDITOR.replace('news_text_en');
+		</script>
+	</div>
+{% endblock %}
