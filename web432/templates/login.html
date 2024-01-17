@@ -7,9 +7,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 		<!-- tab icon -->
-		<link rel="icon" type="image/png" sizes="64x64" href="static/images/favicon-16x16.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon-16x16.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+		<link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/favicon-64x64.png') }}">
 
 		<!-- Bootstrap -->
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -22,54 +22,81 @@
 
 		<!-- Stylesheets -->
 		<link rel="stylesheet" href="/static/stylesheets/login.css">
+
+		<!-- Flash Alert Symbols -->
+		<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			<symbol id="check-circle-fill" viewBox="0 0 16 16">
+				<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+			</symbol>
+			<symbol id="info-fill" viewBox="0 0 16 16">
+				<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+			</symbol>
+			<symbol id="exclamation-triangle-fill" viewBox="0 0 16 16">
+				<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+			</symbol>
+		</svg>
 	</head>
 		<body class="bg-dark">
-			<div class="modal fade" id="loading" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered text-center">
-							<div class="row m-0 text-center">
-									<div class="col-12 mb-2">
-											<svg version="1.1" id="clock" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
-													<circle fill="none" stroke="#fff" stroke-width="4" stroke-miterlimit="10" cx="50" cy="50" r="48"></circle>
-													<line fill="none" stroke-linecap="round" stroke="#fff" stroke-width="4" stroke-miterlimit="10" x1="50" y1="50" x2="85" y2="50.5">
-															<animateTransform attributeName="transform" dur="2s" type="rotate" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
-													</line>
-													<line fill="none" stroke-linecap="round" stroke="#fff" stroke-width="4" stroke-miterlimit="10" x1="50" y1="50" x2="49.5" y2="74">
-															<animateTransform attributeName="transform" dur="10s" type="rotate" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
-													</line>
-											</svg>
-									</div>
-									<div class="col-12 mt-4">
-											<h4 style="-webkit-filter: drop-shadow(2px 2px 5px #000);filter: drop-shadow(2px 2px 5px #000);" class="text-white m-0 p-0">Por favor, aguarde...</h4>
-									</div>
-							</div>
+
+			<div class="container">
+        <div class="row justify-content-center align-items-center vh-100">
+					<div class="text-center">
+						<h2 style="-webkit-filter: drop-shadow(5px 5px 5px #222);filter: drop-shadow(5px 5px 5px #222);" class="pt-4 pb-2 text-white mx-auto">Área de Administração</h2>
 					</div>
-			</div>
-			
-			<div class="modal fade" id="lol" tabindex="-1" aria-labelledby="label" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-									<div class="modal-header">
-											<h5 class="modal-title" id="label">Esqueceu-se da palavra-passe?</h5>
-											<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-													<span aria-hidden="true">×</span>
-											</button>
-									</div>
-									<div class="modal-body">
-											<p>Caso não se lembre da palavra-passe da sua conta de administração, siga os seguintes passos:</p>
-											<ul>
-													<li><span class="font-weight-semibold">Passo 1:</span> Não entre em pânico!</li>
-													<li><span class="font-weight-semibold">Passo 2:</span> Respire fundo e acalme-se.</li>
-													<li><span class="font-weight-semibold">Passo 3:</span> Tente lembrar-se da sua palavra-passe.</li>
-													<li><span class="font-weight-semibold">Passo 4:</span> Tente iniciar sessão novamente.</li>
-											</ul>
-									</div>
-									<div class="modal-footer">
-											<button type="button" class="btn btn-secondary" data-dismiss="modal">Obrigado</button>
-									</div>
-							</div>
+					<!-- Logo Column -->
+					<div class="col-md-6 text-center">
+						<img id="logo" alt="logo" width="75%" style="-webkit-filter: drop-shadow(5px 5px 5px #222);filter: drop-shadow(5px 5px 5px #222);" src="{{ url_for('static', filename='images/logo.png') }}" class="img-fluid pb-4">
 					</div>
-			</div>
-			
+					<!-- Login Form Column -->
+					<div class="col-md-6">
+						<div class="card card-login mx-auto mt-1 mb-3" style="-webkit-filter: drop-shadow(1px 1px 5px #222);filter: drop-shadow(1px 1px 5px #222);">
+							<div class="card-header">Introduza as suas credenciais de acesso:</div>
+							<div class="card-body">
+								<!-- Flash Alerts -->
+								{% with messages = get_flashed_messages(with_categories=true) %}
+									{% if messages %}
+										<div class="container mt-3">
+											{% for category, message in messages %}
+												<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+													<svg class="bi flex-shrink-0 me-2" role="img" aria-label="{{ category }}"><use xlink:href="#{{ category }}-fill"/></svg>
+													{{ message }}
+													<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+												</div>
+											{% endfor %}
+										</div>
+									{% endif %}
+								{% endwith %}
+
+								<form id="login-form" method="post">
+									<div class="form-group">
+										<div class="form-label-group">
+											<input id="inputEmail" class="form-control" title="Insira o seu nome de utilizador" placeholder="Nome de utilizador" name="username" type="text" autocomplete="on" required="">
+											<label for="inputEmail">Nome de utilizador</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="form-label-group">
+											<input id="inputPassword" class="form-control" title="Insira a sua palavra-passe" placeholder="Palavra-passe" name="password" type="password" autocomplete="on" required="">
+											<label for="inputPassword">Palavra-passe</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="custom-control custom-checkbox ml-1">
+											<input type="checkbox" id="keep-login" name="session" value="" class="custom-control-input">
+											<label class="custom-control-label text-justify pl-1" for="keep-login">
+												Manter sessão iniciada
+											</label>
+										</div>
+									</div>
+									<button type="submit" class="btn btn-secondary btn-block" value="Submit"><i class="fas fa-sign-in-alt"></i> Iniciar sessão</button>
+								</form>
+							</div>
+						</div>
+					</div>
+        </div>
+    	</div>
+
+			<!-- 
 			<div class="container">
 					<div class="text-center">
 							<h2 style="-webkit-filter: drop-shadow(5px 5px 5px #222);filter: drop-shadow(5px 5px 5px #222);" class="pt-4 pb-2 text-white">Área de Administração</h2>
@@ -79,16 +106,23 @@
 					<div class="card card-login mx-auto mt-1 mb-3" style="-webkit-filter: drop-shadow(1px 1px 5px #222);filter: drop-shadow(1px 1px 5px #222);">
 							<div class="card-header">Introduza as suas credenciais de acesso:</div>
 							<div class="card-body">
-								{% with messages = get_flashed_messages() %}
-								{% if messages %}
-									<ul class=flashes>
-									{% for message in messages %}
-									<li>{{ message }}</li>
-									{% endfor %}
-									</ul>
-								{% endif %}
-								{% endwith %}
-								{% block main %}{% endblock %}								
+
+								-->
+								<!-- Flash Alerts -->
+								<!--
+								{% with messages = get_flashed_messages(with_categories=true) %}
+									{% if messages %}
+										<div class="container mt-3">
+										{% for category, message in messages %}
+											<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+											<svg class="bi flex-shrink-0 me-2" role="img" aria-label="{{ category }}"><use xlink:href="#{{ category }}-fill"/></svg>
+											{{ message }}
+											<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+											</div>
+										{% endfor %}
+										</div>
+									{% endif %}
+								{% endwith %}								
 									<form id="login-form" method="post">
 											<div class="form-group">
 													<div class="form-label-group">
@@ -110,36 +144,21 @@
 															</label>
 													</div>
 											</div>
-										
 											<button type="submit" class="btn btn-secondary btn-block" value="Submit"><i class="fas fa-sign-in-alt"></i> Iniciar sessão</button>
 									</form>
 							</div>
 					</div>
 			</div>
+			-->
 			
 		<!-- Scripts -->
 
 		<!-- Bootstrap-->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-		<script>
-			$(document).ready(function () {
-				$('#loading').modal('hide'); // Hide the loading modal initially
-
-				$('#login-form').submit(function (event) {
-					$('#loading').modal('show'); // Show the loading modal on form submission
-				});
-			});
-		</script>
-
 		<script src="static/scripts/global.js"></script>
 		<script src="/admin/vendor/jquery/jquery.min.js"></script>
 		<script src="/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 		<script src="/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
-		<script>
-				$('#login-form').submit(function(event){
-						$('#loading').modal('show');
-				});
-		</script>
 	</body>
 </html>

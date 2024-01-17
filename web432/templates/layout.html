@@ -10,9 +10,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 		<!-- tab icon -->
-		<link rel="icon" type="image/png" sizes="64x64" href="static/images/favicon-16x16.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="static/images/favicon-16x16.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+		<link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/favicon-64x64.png') }}">
 
 		<!-- Website Manifest -->
 		<link rel="manifest" href="static/site.webmanifest">
@@ -29,80 +29,39 @@
 		<!-- Stylesheets -->
 		<link rel="stylesheet" href="/static/stylesheets/global.css">
 		{% block pagecss %}{% endblock %}
+
+		<!-- Flash Alert Symbols -->
+		<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+			<symbol id="check-circle-fill" viewBox="0 0 16 16">
+			  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+			</symbol>
+			<symbol id="info-fill" viewBox="0 0 16 16">
+			  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+			</symbol>
+			<symbol id="exclamation-triangle-fill" viewBox="0 0 16 16">
+			  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+			</symbol>
+		</svg>
 	</head>
 	<body>
 		<header>
-				<!-- Navbar -->
-				<nav class="navbar navbar-expand-md bg-body-tertiary">
-					<div class="container-fluid">
-							<a class="navbar-brand" href="/" title="Página inicial">
-								<img src="/static/images/logo.png" width="72" height="72" alt="logo" class="logo">
-								<span class="text-432hz">432Hz</span>
-							</a>
-							<button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-								<span class="navbar-toggler-icon"></span>
-							</button>
-							<div class="collapse navbar-collapse" id="navbarSupportedContent">
-								<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-									<li class="nav-item">
-										<a class="nav-link" href="/about">SOBRE NÓS</a>
-									</li>
-									<li class="nav-item dropdown">
-										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown">
-											PROJECTOS
-										</a>
-											<ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdown">
-												<li><a class="dropdown-item" href="#">PROJECTO 432HZ</a></li>
-												<li><a class="dropdown-item" href="#">APRENDER BALEIES</a></li>
-												<li><hr class="dropdown-divider"></li>
-												<li><a class="dropdown-item" href="#">TODOS OS PROJECTOS</a></li>
-											</ul>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="/contacts">CONTACTOS</a>
-									</li>
-									<li class="nav-item dropdown">
-										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown">
-											PT | EN
-										</a>
-											<ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdown">
-												<li><a class="dropdown-item" href="{{ url_for('set_locale', lang='pt') }}">PT</a></li>
-												<li><a class="dropdown-item" href="{{ url_for('set_locale', lang='en') }}">EN</a></li>
-											</ul>
-									</li>
-
-									{% if current_user.is_authenticated %}
-										<li class="nav-item dropdown">
-											<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown">
-												ADMIN
-											</a>
-												<ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdown">
-													<li><a class="dropdown-item" href="/dashboard">DASHBOARD</a></li>
-													<li><a class="dropdown-item" href="/create_news">CRIAR NOTICIA</a></li>
-													<li><a class="dropdown-item" href="/create_project">CRIAR PROJECTO</a></li>
-													{% if current_user.role == 'admin' %}
-														<li><hr class="dropdown-divider"></li>
-														<li><a class="dropdown-item" href="/admin">ADMIN AREA</a></li>
-													{% endif %}
-													<li><hr class="dropdown-divider"></li>
-													<li><a class="dropdown-item" href="/logout">SAIR</a></li>
-												</ul>
-										</li>
-									{% endif %}
-							</ul>
-					</div>
-				</div>
-			</nav>							
+			<!-- Navbar -->
+			{% include 'navbar.html' %}
 		</header>
 		<main>
-			{% with messages = get_flashed_messages() %}
-			{% if messages %}
-				<ul class=flashes>
-				{% for message in messages %}
-				<li>{{ message }}</li>
-				{% endfor %}
-				</ul>
-			{% endif %}
+			<!-- Flash Alerts -->
+			{% with messages = get_flashed_messages(with_categories=true) %}
+				{% if messages %}
+					<div class="container mt-3">
+					{% for category, message in messages %}
+						<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+						<svg class="bi flex-shrink-0 me-2" role="img" aria-label="{{ category }}"><use xlink:href="#{{ category }}-fill"/></svg>
+						{{ message }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+					{% endfor %}
+					</div>
+				{% endif %}
 			{% endwith %}
 			{% block main %}{% endblock %}
 		</main>
@@ -127,9 +86,9 @@
 				</div>
 
 				<div class="col-md-8 mb-2 text-md-right">
-					<a class="social-media transition" title="Facebook" href="/facebook" target="_blank" rel="nofollow noopener"><i class="fab fa-facebook-f fa-fw social-icon social-icon-small"></i></a>
-					<a class="social-media transition ml-1" title="Instagram" href="/instagram" target="_blank" rel="nofollow noopener"><i class="fab fa-instagram fa-fw social-icon social-icon-small"></i></a>
-					<a class="social-media transition ml-1" title="Email" href="/email"><i class="fas fa-envelope fa-fw social-icon social-icon-small"></i></a>
+					<a class="social-media transition" title="Facebook" href="{{ url_for('facebook') }}" target="_blank" rel="nofollow noopener"><i class="fab fa-facebook-f fa-fw social-icon social-icon-small"></i></a>
+					<a class="social-media transition ml-1" title="Instagram" href="{{ url_for('instagram') }}" target="_blank" rel="nofollow noopener"><i class="fab fa-instagram fa-fw social-icon social-icon-small"></i></a>
+					<a class="social-media transition ml-1" title="Email" href="{{ url_for('email') }}"><i class="fas fa-envelope fa-fw social-icon social-icon-small"></i></a>
 				</div>
 			</section>
 			

@@ -1,0 +1,60 @@
+<nav class="navbar navbar-expand-md bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('index') }}" title="Página inicial">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" width="72" height="72" alt="logo" class="logo">
+      <span class="text-432hz">432Hz</span>
+    </a>
+    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('about') }}">SOBRE NÓS</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjects">
+            PROJECTOS
+          </a>
+          <ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdownProjects">
+            <li><a class="dropdown-item" href="#">PROJECTO 432HZ</a></li>
+            <li><a class="dropdown-item" href="#">APRENDER BALEIAS</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{ url_for('projects') }}">TODOS OS PROJECTOS</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('contacts') }}">CONTACTOS</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownLanguage">
+            PT | EN
+          </a>
+          <ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdownLanguage">
+            <li><a class="dropdown-item" href="{{ url_for('set_locale', lang='pt') }}">PT</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('set_locale', lang='en') }}">EN</a></li>
+          </ul>
+        </li>
+
+        {% if current_user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin">
+              ADMIN
+            </a>
+            <ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdownAdmin">
+              <li><a class="dropdown-item" href="{{ url_for('dashboard') }}">DASHBOARD</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('create_news') }}">CRIAR NOTICIA</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('create_project') }}">CRIAR PROJECTO</a></li>
+              {% if current_user.role == 'admin' %}
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">ADMIN AREA</a></li>
+              {% endif %}
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{{ url_for('logout') }}">SAIR</a></li>
+            </ul>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

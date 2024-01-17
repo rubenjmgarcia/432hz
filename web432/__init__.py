@@ -4,7 +4,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_login import current_user
 from flask_babel import Babel
-from web432.models import User
+from web432.models import Users
 from web432.database import db
 import os
 import secrets
@@ -37,7 +37,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        return Users.query.get(int(user_id))
 
     # Custom Error Pages
 

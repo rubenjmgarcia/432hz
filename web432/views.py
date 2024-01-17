@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from functools import wraps
-from web432.models import User
+from web432.models import Users
 from web432.database import db
 from web432.forms import EditUserForm, CreateUserForm, ChangePasswordForm, NewsForm
 import os
@@ -22,6 +22,7 @@ def role_required(*roles):
     return wrapper
 
 def register_routes(app, role_required):
+    @app.route('/index')
     @app.route('/')
     def index():
         return render_template("index.html")
@@ -57,11 +58,11 @@ def register_routes(app, role_required):
             password = request.form.get("password")
 
             if not username or not password:
-                flash("Must provide both username and password", "error")
+                flash("Must provide both username and password", "danger")
                 return redirect(url_for("login"))
 
             # Query database for username
-            user = User.query.filter_by(username=username).first()
+            user = Users.query.filter_by(username=username).first()
 
             # Ensure username exists and password is correct
             if user and check_password_hash(user.password, password):
@@ -69,7 +70,7 @@ def register_routes(app, role_required):
                 flash("Login successful!", "success")
                 return redirect("/dashboard")
             else:
-                flash("Invalid username and/or password", "error")
+                flash("Invalid username and/or password", "danger")
 
         return render_template("login.html")
 
@@ -85,8 +86,8 @@ def register_routes(app, role_required):
     @login_required
     @role_required('admin')
     def admin_dashboard():
-        users = User.query.all()
-        return render_template('admin.html', users=User.query.all(), edit_user_form=EditUserForm(), create_user_form=CreateUserForm())
+        users = Users.query.all()
+        return render_template('admin.html', users=Users.query.all(), edit_user_form=EditUserForm(), create_user_form=CreateUserForm())
 
     @app.route("/admin/change_role", methods=['POST'])
     @login_required
@@ -100,16 +101,16 @@ def register_routes(app, role_required):
     @login_required
     @role_required('admin')
     def edit_user_route(user_id):
-        user_to_edit = User.query.get(user_id)
+        user_to_edit = Users.query.get(user_id)
         if not user_to_edit:
-            flash("User not found", "error")
+            flash("User not found", "danger")
             return redirect(url_for('admin_dashboard'))
 
         # Retrieve the current logged-in user
         current_logged_in_user = current_user
 
         if user_to_edit.id == 1 and current_logged_in_user.id != 1:
-            flash("You can't edit this User", "error")
+            flash("You can't edit this User", "danger")
             return redirect(url_for('admin_dashboard'))
 
         # Check if the logged-in user is user ID 1
@@ -133,7 +134,7 @@ def register_routes(app, role_required):
             flash("User details updated", "success")
             return redirect(url_for('admin_dashboard'))
 
-        return render_template('admin.html', users=User.query.all(), form=form)
+        return render_template('admin.html', users=Users.query.all(), form=form)
 
     @app.route("/admin/reset_password", methods=['POST'])
     @login_required
@@ -148,16 +149,16 @@ def register_routes(app, role_required):
     @role_required('admin')
     def delete_user(user_id):
         # Query the database for the user
-        user = User.query.get(user_id)
+        user = Users.query.get(user_id)
 
         if user and user.id != 1:
             db.session.delete(user)
             db.session.commit()
             flash("User deleted successfully", "success")
         elif user and user.id == 1:
-            flash("You can't delete this User", "error")
+            flash("You can't delete this User", "danger")
         else:
-            flash("User not found", "error")
+            flash("User not found", "danger")
 
         return redirect(url_for('admin_dashboard'))
 
@@ -169,7 +170,7 @@ def register_routes(app, role_required):
 
         if form.validate_on_submit():
             # Process form data for creating a new user
-            new_user = User(
+            new_user = Users(
                 username=form.new_username.data,
                 name=form.new_name.data,
                 email=form.new_email.data,
@@ -182,7 +183,7 @@ def register_routes(app, role_required):
             flash("User created successfully", "success")
             return redirect(url_for('admin_dashboard'))
 
-        return render_template('admin.html', users=User.query.all(), form=form)
+        return render_template('admin.html', users=Users.query.all(), form=form)
 
     @app.route("/admin/upload_profile_pic/<int:user_id>", methods=['POST'])
     @login_required
@@ -198,13 +199,13 @@ def register_routes(app, role_required):
             file.save(os.path.join(app.config['UPLOAD_DIRECTORY'], filepath))
 
             # Save the filepath in the database
-            user = User.query.get(user_id)
+            user = Users.query.get(user_id)
             user.photo = filepath
             db.session.commit()
 
             flash("Profile picture uploaded successfully", "success")
         else:
-            flash("Invalid file or file type", "error")
+            flash("Invalid file or file type", "danger")
 
         return redirect(url_for('admin_dashboard'))
 
@@ -217,7 +218,7 @@ def register_routes(app, role_required):
     @app.route("/dashboard", methods=['GET', 'POST'])
     @login_required
     def dashboard():
-        users = User.query.all()
+        users = Users.query.all()
         change_password_form = ChangePasswordForm()
 
         if change_password_form.validate_on_submit():
@@ -226,7 +227,7 @@ def register_routes(app, role_required):
 
             # Check if the current password is correct
             if not check_password_hash(current_user.password, current_password):
-                flash('Current password is incorrect', 'error')
+                flash('Current password is incorrect', 'danger')
                 return redirect(url_for('dashboard'))
 
             # Update the user's password
@@ -248,10 +249,26 @@ def register_routes(app, role_required):
             return redirect(url_for('dashboard'))
         return render_template('create_news.html', form=form)
 
+    @app.route("/news")
+    def news():
+        return render_template('news_all.html')
+
+    @app.route("/news/<news_id>")
+    def news_id():
+        return render_template('news_all.html')
+
     @app.route("/create_project")
     @login_required
     def create_project():
         return render_template("create_project.html")
+
+    @app.route("/projects")
+    def projects():
+        return render_template('projects_all.html')
+
+    @app.route("/projects/<project_id>")
+    def project_id():
+        return render_template('projects_all.html')
 
     @app.route('/setlocale/<lang>')
     def set_locale(lang):
@@ -267,7 +284,7 @@ def register_routes(app, role_required):
 
 def reset_user_password(user_id):
     # Query the database for the user
-    user = User.query.get(user_id)
+    user = Users.query.get(user_id)
 
     # If the user exists, reset their password to the default
     if user:
@@ -275,24 +292,11 @@ def reset_user_password(user_id):
         user.password = generate_password_hash(default_password)
         db.session.commit()
 
-def create_new_user():
-    new_user = User(
-        username=request.form.get('new_username'),
-        name=request.form.get('new_name'),
-        email=request.form.get('new_email'),
-        phone=request.form.get('new_phone'),
-        password=generate_password_hash("panquecas"),  # Default password
-        photo='profile/logo.png' # Default photo
-    )
-    db.session.add(new_user)
-    db.session.commit()
-    flash("User created successfully", "success")
-
 def change_user_role(user_id, new_role):
-    user = User.query.get(user_id)
+    user = Users.query.get(user_id)
 
     if not user:
-        flash("User not found", "error")
+        flash("User not found", "danger")
         return redirect(url_for('admin_dashboard'))
 
     if request.method == 'POST':
@@ -302,7 +306,7 @@ def change_user_role(user_id, new_role):
         flash(f"User {user.name} role updated to {user.role}", "success")
         return redirect(url_for('admin_dashboard'))
 
-    return render_template('admin.html', users=User.query.all())
+    return render_template('admin.html', users=Users.query.all())
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
