@@ -5,7 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from functools import wraps
-from web432.models import Users
+from datetime import datetime
+from web432.models import Users, News
 from web432.database import db
 from web432.forms import EditUserForm, CreateUserForm, ChangePasswordForm, NewsForm
 import os
@@ -239,23 +240,86 @@ def register_routes(app, role_required):
 
         return render_template('dashboard.html', users=users, change_password_form=change_password_form)
 
-    @app.route("/create_news")
+    @app.route("/create_news", methods=["GET", "POST"])
     @login_required
     def create_news():
         form = NewsForm()
+        form.date.data = datetime.utcnow().date()
+
         if form.validate_on_submit():
-            # Process the form data and save the news post
-            flash('News post created successfully!', 'success')
-            return redirect(url_for('dashboard'))
+            try:
+                # Convert news_url to file-safe name
+                news_url_safe = secure_filename(form.news_url.data)
+
+                #make the news photo directory
+                news_photos_direcory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_safe)
+                os.makedirs(news_photos_direcory, exist_ok=True)
+
+                # Save the cover image
+                cover_image = form.cover_image.data
+                cover_image_filename = secure_filename(cover_image.filename)
+                cover_image_path = os.path.join(news_photos_direcory, cover_image_filename)
+                cover_image.save(cover_image_path)
+
+                # Save the photos
+                photos = form.photos.data
+                photos_filenames = [secure_filename(photo.filename) for photo in photos]
+
+                photos_path = []
+                for i, photo in enumerate(photos):
+                    photo_filename = photos_filenames[i]
+                    photo_path = os.path.join(news_photos_direcory, photo_filename)
+                    photo.save(photo_path)
+                    photos_path.append(photo_filename)
+
+                # Create a new News post
+                new_post = News(
+                    news_url=form.news_url.data,
+                    title_en=form.title_en.data,
+                    title_pt=form.title_pt.data,
+                    summary_en=form.summary_en.data,
+                    summary_pt=form.summary_pt.data,
+                    body_en=form.body_en.data,
+                    body_pt=form.body_pt.data,
+                    author=current_user.username,
+                    cover=cover_image_filename,
+                    photos=' && '.join(photos_path),
+                    photographers=form.photographers.data,
+                    category=form.category.data,
+                    date=form.date.data
+                )
+
+                # Save to the database
+                db.session.add(new_post)
+                db.session.commit()
+
+                flash('News post created successfully!', 'success')
+                return redirect(url_for('dashboard'))
+            except Exception as e:
+                flash(f'Error: {str(e)}', 'danger')
+
         return render_template('create_news.html', form=form)
 
     @app.route("/news")
     def news():
-        return render_template('news_all.html')
+        all_news = News.query.all()
+        return render_template('news_all.html', news_posts=all_news)
 
-    @app.route("/news/<news_id>")
-    def news_id():
-        return render_template('news_all.html')
+    @app.route("/news/<news_url>")
+    def news_url(news_url):
+        # Fetch the news post based on the news_url
+        news_post = News.query.filter_by(news_url=news_url).first()
+
+        # Check if the news post exists
+        if not news_post:
+            abort(404)
+        
+        # Fetch the author
+        author = Users.query.filter_by(username=news_post.author).first()
+        if not author:
+            abort(404)
+
+        return render_template('news.html', news_post=news_post, author=author)
 
     @app.route("/create_project")
     @login_required

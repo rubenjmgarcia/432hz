@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {% block title %}
-	Nome da Noticia | 432Hz
+	{% if session['lang'] == 'en' %}
+		{{ news_post.title_en }} | 432Hz
+	{% else %}
+		{{ news_post.title_pt }} | 432Hz
+	{% endif %}
 {% endblock %}
 
 {% block pagecss %}
@@ -9,9 +13,47 @@
 {% endblock %}
 
 {% block main %}
-	{% if current_user.is_authenticated %}
-	<p>Olá, {{ current_user.name }}!</p>
+	{# Cover Image #}
+	<p>Cover Image</p>
+	{{ news_post.cover }}
+
+	{# Title #}
+	{% if session['lang'] == 'en' %}
+		{{ news_post.title_en }}
 	{% else %}
-	<p>Olá, Visitante!</p>
+		{{ news_post.title_pt }}
 	{% endif %}
+
+	{# Summary #}
+	{% if session['lang'] == 'en' %}
+		{{ news_post.summary_en | safe }}
+	{% else %}
+		{{ news_post.summary_pt | safe }}
+	{% endif %}
+
+	{# Photos Carrossel #}
+	<p>Photos Carrossel</p>
+	{{ news_post.photos }}
+	<p>Photos Carrossel</p>
+	<p>&copy; {{ news_post.photographers }}</p>
+
+	{# Body #}
+	{% if session['lang'] == 'en' %}
+		{{ news_post.body_en | safe }}
+	{% else %}
+		{{ news_post.body_pt | safe }}
+	{% endif %}
+
+	{# Author and Date #}
+	<div class="mt-5 ml-2">                  
+		<img src="{{ url_for('serve_image', subpath=author.photo.split('/')[0] if author.photo else '', filename=author.photo.split('/')[-1] if author.photo else '') }}" loading="lazy" alt="" width="80" height="80" class="avatar mr-4">
+		<div class="d-inline-block align-middle">
+			<p title="Autor" class="header2 mb-0" style="text-transform: initial;font-size: 1.05rem;">{{ author.name }}</p>
+			<p title="Data de publicação" class="font-weight-light text-muted mb-0" style="font-size: 1rem;"><i class="far fa-clock mr-2"></i><time datetime="{{ news_post.date.strftime('%Y-%m-%d') }}">{{ news_post.date.strftime('%Y-%m-%d') }}</time></p>
+		</div>
+	</div>
+
+	{# Category #}
+	{{ news_post.category }}
+
 {% endblock %}

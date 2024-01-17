@@ -9,9 +9,33 @@
 {% endblock %}
 
 {% block main %}
-	{% if current_user.is_authenticated %}
-	<p>Olá, {{ current_user.name }}!</p>
-	{% else %}
-	<p>Olá, Visitante!</p>
-	{% endif %}
+<div class="container">
+	<h2 class="text-center">All News Posts</h2>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>URL</th>
+				<th>Title</th>
+				<th>Summary</th>
+				<th>Body</th>
+				<th>Author</th>
+				<th>Date</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for post in news_posts %}
+				<tr>
+					<td>{{ post.id }}</td>
+					<td><a href="{{ url_for('news_url', news_url=post.news_url) }}">{{ post.news_url }}</a></td>
+					<td>{{ post.title_en }}</td>
+					<td>{{ post.summary_en | safe }}</td>
+					<td>{{ post.body_en | safe }}</td>
+					<td>{{ post.author }}</td>
+					<td>{{ post.date.strftime('%d/%m/%Y') }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
 {% endblock %}
