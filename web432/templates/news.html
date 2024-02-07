@@ -13,8 +13,12 @@
 {% endblock %}
 
 {% block main %}
+	{# URL #}
+	{{ news_post.news_url }}
+
 	{# Cover Image #}
 	<p>Cover Image</p>
+	<img src="{{ url_for('serve_image', subpath=news_post.news_url if news_post.news_url else '', filename=news_post.cover if news_post.cover else '') }}" width="250px">
 	{{ news_post.cover }}
 
 	{# Title #}
@@ -32,9 +36,35 @@
 	{% endif %}
 
 	{# Photos Carrossel #}
-	<p>Photos Carrossel</p>
-	{{ news_post.photos }}
-	<p>Photos Carrossel</p>
+
+	<div id="news-images" class="carousel slide mt-5" data-ride="carousel" data-interval="5000">
+		<ol class="carousel-indicators">
+			{% for photo in photos_list %}
+			<li data-target="#news-images" data-slide-to="{{ loop.index }}" {% if loop.first %}class="active"{% endif %}></li>
+			{% endfor %}
+		</ol>
+		<div class="carousel-inner">
+			{% for photo in photos_list %}
+			<div class="normal-carousel carousel-item {% if loop.index == 1 %}active{% endif %}">
+				<div class="row justify-content-center align-items-center">
+					<article class="col-10 text-center">
+						<img src="{{ url_for('serve_image', subpath=news_post.news_url if news_post.news_url else '', filename=photo) }}" loading="lazy" alt="" class="img-fluid rounded shadow-sm">
+					</article>
+				</div>
+			</div>
+			{% endfor %}
+
+			<button class="carousel-control-prev" type="button" data-target="#news-images" data-slide="prev">
+				<i class="fas fa-chevron-left text-dark" style="position: absolute;left: 0;"></i>
+			</button>				
+
+			<button class="carousel-control-next" type="button" data-target="#news-images" data-slide="next">
+				<i class="fas fa-chevron-right text-dark" alt="Seguinte" width="20" style="position: absolute;right: 0;"></i>
+			</button>
+
+		</div>
+	</div>
+
 	<p>&copy; {{ news_post.photographers }}</p>
 
 	{# Body #}
@@ -55,5 +85,9 @@
 
 	{# Category #}
 	{{ news_post.category }}
+
+{% endblock %}
+
+{% block pagescripts %}
 
 {% endblock %}

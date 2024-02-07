@@ -252,13 +252,13 @@ def register_routes(app, role_required):
                 news_url_safe = secure_filename(form.news_url.data)
 
                 #make the news photo directory
-                news_photos_direcory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_safe)
-                os.makedirs(news_photos_direcory, exist_ok=True)
+                news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_safe)
+                os.makedirs(news_photos_directory, exist_ok=True)
 
                 # Save the cover image
                 cover_image = form.cover_image.data
                 cover_image_filename = secure_filename(cover_image.filename)
-                cover_image_path = os.path.join(news_photos_direcory, cover_image_filename)
+                cover_image_path = os.path.join(news_photos_directory, cover_image_filename)
                 cover_image.save(cover_image_path)
 
                 # Save the photos
@@ -268,13 +268,13 @@ def register_routes(app, role_required):
                 photos_path = []
                 for i, photo in enumerate(photos):
                     photo_filename = photos_filenames[i]
-                    photo_path = os.path.join(news_photos_direcory, photo_filename)
+                    photo_path = os.path.join(news_photos_directory, photo_filename)
                     photo.save(photo_path)
                     photos_path.append(photo_filename)
 
                 # Create a new News post
                 new_post = News(
-                    news_url=form.news_url.data,
+                    news_url=news_url_safe,
                     title_en=form.title_en.data,
                     title_pt=form.title_pt.data,
                     summary_en=form.summary_en.data,
@@ -319,7 +319,10 @@ def register_routes(app, role_required):
         if not author:
             abort(404)
 
-        return render_template('news.html', news_post=news_post, author=author)
+        # Split photos string into a list
+        photos_list = news_post.photos.split(' && ')
+
+        return render_template('news.html', news_post=news_post, author=author, photos_list=photos_list)
 
     @app.route("/create_project")
     @login_required
