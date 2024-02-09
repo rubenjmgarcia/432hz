@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_ckeditor import CKEditorField
-from wtforms import StringField, SubmitField, SelectField, PasswordField, TextAreaField, FileField, FieldList, FormField, MultipleFileField
+from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, PasswordField, TextAreaField, FileField, FieldList, FormField, MultipleFileField
 from wtforms.validators import DataRequired, EqualTo, Email
 
 class EditUserForm(FlaskForm):
@@ -35,6 +35,18 @@ class NewsForm(FlaskForm):
     cover_image = FileField('Cover Image', validators=[DataRequired()])
     photos = MultipleFileField('Photos Upload', validators=[DataRequired()])
     photographers = StringField('Photographers', validators=[DataRequired()])
-    category = SelectField('Category', choices=[('sports', 'Sports'), ('politics', 'Politics'), ('entertainment', 'Entertainment')], validators=[DataRequired()])
+    category = SelectField('Category', choices=[('art', 'Art'), ('science', 'Science'), ('community', 'Community')], validators=[DataRequired()])
     date = StringField('Date', validators=[DataRequired()])
     submit = SubmitField('Create News Post')
+
+class NewsFormText(FlaskForm):
+    news_url = StringField('News URL', validators=[DataRequired()])
+    title_pt = StringField('Title (PT)', validators=[DataRequired()])
+    title_en = StringField('Title (EN)', validators=[DataRequired()])
+    summary_pt = CKEditorField('Summary (PT)', validators=[DataRequired()])
+    summary_en = CKEditorField('Summary (EN)', validators=[DataRequired()])
+    body_pt = CKEditorField('Body (PT)', validators=[DataRequired()])
+    body_en = CKEditorField('Body (EN)', validators=[DataRequired()])
+    category = SelectField('Category', choices=[('art', 'Art'), ('science', 'Science'), ('community', 'Community')], validators=[DataRequired()])
+    date = StringField('Date', validators=[DataRequired()])
+    submit = SubmitField('Edit News Post')

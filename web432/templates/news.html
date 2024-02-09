@@ -13,78 +13,76 @@
 {% endblock %}
 
 {% block main %}
-	{# URL #}
-	{{ news_post.news_url }}
+	<section class="row media-container" style="position: relative;">
+		{# Cover Image #}
+        <div><img src="{{ url_for('serve_image', subpath=news_post.news_url if news_post.news_url else '', filename=news_post.cover if news_post.cover else '') }}" width="250px"></div>
+    </section>
 
-	{# Cover Image #}
-	<p>Cover Image</p>
-	<img src="{{ url_for('serve_image', subpath=news_post.news_url if news_post.news_url else '', filename=news_post.cover if news_post.cover else '') }}" width="250px">
-	{{ news_post.cover }}
+	<section id="news" class="row mt-3 mb-3 margin-left-1">
+		<article class="col-12" id="section1">
+			<ul class="tags text-uppercase mt-4 mb-2">
+				<li><div class="">{{ news_post.category }}</div></li>
+			</ul>
 
-	{# Title #}
-	{% if session['lang'] == 'en' %}
-		{{ news_post.title_en }}
-	{% else %}
-		{{ news_post.title_pt }}
-	{% endif %}
+			<p id="news_title" class="header2 mb-3 mt-1" style="font-size: 1.8rem;">
+				{# Title #}
+				{% if session['lang'] == 'en' %}
+					{{ news_post.title_en }}
+				{% else %}
+					{{ news_post.title_pt }}
+				{% endif %}
+			</p>
 
-	{# Summary #}
-	{% if session['lang'] == 'en' %}
-		{{ news_post.summary_en | safe }}
-	{% else %}
-		{{ news_post.summary_pt | safe }}
-	{% endif %}
+		<p id="news_summary" class="header2 font-italic font-weight-normal text-muted mb-4" style="font-size: 1.2rem;text-transform: initial;">
+			{# Summary #}
+			{% if session['lang'] == 'en' %}
+				{{ news_post.summary_en | safe }}
+			{% else %}
+				{{ news_post.summary_pt | safe }}
+			{% endif %}
+		</p>
 
-	{# Photos Carrossel #}
-
-	<div id="news-images" class="carousel slide mt-5" data-ride="carousel" data-interval="5000">
-		<ol class="carousel-indicators">
-			{% for photo in photos_list %}
-			<li data-target="#news-images" data-slide-to="{{ loop.index }}" {% if loop.first %}class="active"{% endif %}></li>
-			{% endfor %}
-		</ol>
-		<div class="carousel-inner">
-			{% for photo in photos_list %}
-			<div class="normal-carousel carousel-item {% if loop.index == 1 %}active{% endif %}">
-				<div class="row justify-content-center align-items-center">
-					<article class="col-10 text-center">
-						<img src="{{ url_for('serve_image', subpath=news_post.news_url if news_post.news_url else '', filename=photo) }}" loading="lazy" alt="" class="img-fluid rounded shadow-sm">
-					</article>
-				</div>
+		{# Photos Carrossel #}
+		<div id="news-carousel" class="carousel slide mt-5" data-bs-ride="carousel">
+			<div class="carousel-indicators">
+				{% for photo in photos_list %}
+				<button type="button" data-bs-target="#news-carousel" data-bs-slide-to="{{ loop.index }}" {% if loop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ loop.index }}"></button>
+				{% endfor %}
 			</div>
-			{% endfor %}
-
-			<button class="carousel-control-prev" type="button" data-target="#news-images" data-slide="prev">
-				<i class="fas fa-chevron-left text-dark" style="position: absolute;left: 0;"></i>
-			</button>				
-
-			<button class="carousel-control-next" type="button" data-target="#news-images" data-slide="next">
-				<i class="fas fa-chevron-right text-dark" alt="Seguinte" width="20" style="position: absolute;right: 0;"></i>
+		
+			<div class="carousel-inner">
+				{% for photo in photos_list %}
+				<div class="carousel-item {% if loop.index == 1 %}active{% endif %} c-item">
+					<img src="{{ url_for('serve_image', subpath=news_post.news_url if news_post.news_url else '', filename=photo) }}" class="d-block w-100 c-img" alt="Slide {{ loop.index }}">
+				</div>
+				{% endfor %}
+			<button class="carousel-control-prev" type="button" data-bs-target="#news-carousel" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
 			</button>
-
+			<button class="carousel-control-next" type="button" data-bs-target="#news-carousel" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+			</button>
 		</div>
-	</div>
+		<p>&copy; {{ news_post.photographers }}</p>
 
-	<p>&copy; {{ news_post.photographers }}</p>
+		{# Body #}
+		{% if session['lang'] == 'en' %}
+			{{ news_post.body_en | safe }}
+		{% else %}
+			{{ news_post.body_pt | safe }}
+		{% endif %}
 
-	{# Body #}
-	{% if session['lang'] == 'en' %}
-		{{ news_post.body_en | safe }}
-	{% else %}
-		{{ news_post.body_pt | safe }}
-	{% endif %}
-
-	{# Author and Date #}
-	<div class="mt-5 ml-2">                  
-		<img src="{{ url_for('serve_image', subpath=author.photo.split('/')[0] if author.photo else '', filename=author.photo.split('/')[-1] if author.photo else '') }}" loading="lazy" alt="" width="80" height="80" class="avatar mr-4">
-		<div class="d-inline-block align-middle">
-			<p title="Autor" class="header2 mb-0" style="text-transform: initial;font-size: 1.05rem;">{{ author.name }}</p>
-			<p title="Data de publicação" class="font-weight-light text-muted mb-0" style="font-size: 1rem;"><i class="far fa-clock mr-2"></i><time datetime="{{ news_post.date.strftime('%Y-%m-%d') }}">{{ news_post.date.strftime('%Y-%m-%d') }}</time></p>
+		{# Author and Date #}
+		<div class="mt-5 ml-2">                  
+			<img src="{{ url_for('serve_image', subpath=author.photo.split('/')[0] if author.photo else '', filename=author.photo.split('/')[-1] if author.photo else '') }}" loading="lazy" alt="" width="80" height="80" class="avatar mr-4">
+			<div class="d-inline-block align-middle">
+				<p title="Autor" class="header2 mb-0" style="text-transform: initial;font-size: 1.05rem;">{{ author.name }}</p>
+				<p title="Data de publicação" class="font-weight-light text-muted mb-0" style="font-size: 1rem;"><i class="far fa-clock mr-2"></i><time datetime="{{ news_post.date.strftime('%Y-%m-%d') }}">{{ news_post.date.strftime('%Y-%m-%d') }}</time></p>
+			</div>
 		</div>
-	</div>
-
-	{# Category #}
-	{{ news_post.category }}
+	</section>
 
 {% endblock %}
 

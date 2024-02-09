@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Editar Noticia | 432Hz
+{% endblock %}
+
+{% block pagecss %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/dashboard.css') }}">
+{% endblock %}
+
+{% block main %}
+    <div class="container" style="width: 75%;">
+        <h2 class="text-center">Editar Noticia</h2>
+        <form method="POST" action="{{ url_for('edit_news_text', news_id=news_post.id) }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">{{ form.news_url.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.news_url(class="form-control", value=news_post.news_url) }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">{{ form.title_pt.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.title_pt(class="form-control", value=news_post.title_pt) }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">{{ form.title_en.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.title_en(class="form-control", value=news_post.title_en) }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">{{ form.summary_pt.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.summary_pt(class="form-control", value=news_post.summary_pt) }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">{{ form.summary_en.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.summary_en(class="form-control", value=news_post.summary_en) }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">{{ form.body_pt.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.body_pt(class="form-control", value=news_post.body_pt) }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">{{ form.body_en.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.body_en(class="form-control", value=news_post.body_en) }}
+                </div>
+            </div>       
+
+            <div class="form-group row">
+				<label class="col-sm-2 col-form-label">{{ form.category.label }}</label>
+				<div class="col-sm-10">
+					{{ form.category(class="form-control", value=news_post.category) }}
+				</div>
+			</div>
+
+            <div class="form-group row">
+				<label class="col-sm-2 col-form-label">{{ form.date.label }}</label>
+				<div class="col-sm-10">
+					{{ form.date(type="date", value=form.date.data, class="form-control") }}
+				</div>
+			</div>
+
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+
+        </form>
+
+        <script>
+            // CKEditor for the text areas
+            CKEDITOR.replace('summary_pt');
+            CKEDITOR.replace('summary_en');
+            CKEDITOR.replace('body_pt');
+            CKEDITOR.replace('body_en');
+        </script>
+    </div>
+{% endblock %}

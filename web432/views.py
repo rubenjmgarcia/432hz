@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, flash, session, send_from_directory
+from flask import Flask, render_template, redirect, request, url_for, flash, session, send_from_directory, abort
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_babel import _
 from flask_sqlalchemy import SQLAlchemy
@@ -8,7 +8,7 @@ from functools import wraps
 from datetime import datetime
 from web432.models import Users, News
 from web432.database import db
-from web432.forms import EditUserForm, CreateUserForm, ChangePasswordForm, NewsForm
+from web432.forms import EditUserForm, CreateUserForm, ChangePasswordForm, NewsForm, NewsFormText
 import os
 import secrets
 import shutil
@@ -295,7 +295,7 @@ def register_routes(app, role_required):
                 db.session.commit()
 
                 flash('News post created successfully!', 'success')
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('news_dashboard'))
             except Exception as e:
                 flash(f'Error: {str(e)}', 'danger')
 
@@ -404,6 +404,75 @@ def register_routes(app, role_required):
             flash("News post not found", "error")
             return redirect(url_for("news_dashboard"))
 
+    @app.route("/edit_news_text/<int:news_id>", methods=["GET", "POST"])
+    @login_required
+    def edit_news_text(news_id):
+        news_post = News.query.get(news_id)
+        if not news_post:
+            flash("News post not found", "error")
+            return redirect(url_for("news_dashboard"))
+
+        form = NewsFormText(obj=news_post)
+        form.date.data = datetime.utcnow().date()
+
+        if form.validate_on_submit():
+            try:
+                # Update text content fields
+                news_post.title_pt = form.title_pt.data
+                news_post.title_en = form.title_en.data
+                news_post.summary_pt = form.summary_pt.data
+                news_post.summary_en = form.summary_en.data
+                news_post.body_pt = form.body_pt.data
+                news_post.body_en = form.body_en.data
+                news_post.category = form.category.data
+                news_post.date = form.date.data
+
+                # Check if news_url has changed
+                if form.news_url.data != news_post.news_url:
+                    old_news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_post.news_url)
+                    if os.path.exists(old_news_photos_directory):
+                        # Create new directory
+                        news_url_safe = secure_filename(form.news_url.data)
+                        news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_safe)
+                        os.makedirs(news_photos_directory, exist_ok=True)
+
+                        # Update news post's news_url
+                        news_post.news_url = news_url_safe
+
+                        # Move photos to new directory
+                        for filename in os.listdir(old_news_photos_directory):
+                            source = os.path.join(old_news_photos_directory, filename)
+                            destination = os.path.join(news_photos_directory, filename)
+                            shutil.move(source, destination)
+
+                        # Remove the old directory after moving photos
+                        shutil.rmtree(old_news_photos_directory)
+
+                db.session.commit()
+                flash('Text content updated successfully!', 'success')
+                return redirect(url_for('news_dashboard'))
+            except Exception as e:
+                flash(f'Error: {str(e)}', 'danger')
+
+        return render_template('edit_news_text.html', form=form, news_post=news_post)
+
+    @app.route("/change_status/<int:news_id>/<string:new_status>", methods=["GET", "POST"])
+    @login_required
+    def change_status(news_id, new_status):
+        # Fetch the news post based on the news_id
+        news_post = News.query.get(news_id)
+
+        # Check if the news post exists
+        if not news_post:
+            abort(404)
+
+        # Update the status of the news post
+        news_post.status = new_status
+        db.session.commit()
+
+        flash(f'News post status changed to {new_status} successfully!', 'success')
+        return redirect(url_for('news_dashboard'))
+
     @app.route("/news")
     def news():
         all_news = News.query.all()
@@ -421,6 +490,9 @@ def register_routes(app, role_required):
         # Fetch the author
         author = Users.query.filter_by(username=news_post.author).first()
         if not author:
+            abort(404)
+
+        if news_post.status == "draft" and not current_user.is_authenticated:
             abort(404)
 
         # Split photos string into a list
