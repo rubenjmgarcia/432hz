@@ -43,8 +43,6 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdownAdmin">
               <li><a class="dropdown-item" href="{{ url_for('dashboard') }}">DASHBOARD</a></li>
-              <li><a class="dropdown-item" href="{{ url_for('create_news') }}">CRIAR NOTICIA</a></li>
-              <li><a class="dropdown-item" href="{{ url_for('create_project') }}">CRIAR PROJECTO</a></li>
               {% if current_user.role == 'admin' %}
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">ADMIN AREA</a></li>

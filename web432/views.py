@@ -11,6 +11,7 @@ from web432.database import db
 from web432.forms import EditUserForm, CreateUserForm, ChangePasswordForm, NewsForm
 import os
 import secrets
+import shutil
 
 def role_required(*roles):
     def wrapper(f):
@@ -299,6 +300,109 @@ def register_routes(app, role_required):
                 flash(f'Error: {str(e)}', 'danger')
 
         return render_template('create_news.html', form=form)
+
+    @app.route("/news_dashboard", methods=["GET"])
+    @login_required
+    def news_dashboard():
+        all_news = News.query.all()
+        return render_template('news_dashboard.html', news_posts=all_news)
+    
+    @app.route("/delete_news/<int:news_id>", methods=["GET"])
+    @login_required
+    def delete_news(news_id):
+        # Get the news post by ID
+        news_post = News.query.get(news_id)
+        
+        if news_post:
+            # Delete the news post from the database
+            db.session.delete(news_post)
+            db.session.commit()
+            
+            # Delete the directory containing the news photos
+            news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_post.news_url)
+            if os.path.exists(news_photos_directory):
+                shutil.rmtree(news_photos_directory)
+            
+            flash("News post deleted successfully", "success")
+        else:
+            flash("News post not found", "error")
+        
+        # Redirect back to the news dashboard
+        return redirect(url_for("news_dashboard"))
+
+    @app.route("/edit_news/<int:news_id>", methods=["GET", "POST"])
+    @login_required
+    def edit_news(news_id):
+        # Get the news post by ID
+        news_post = News.query.get(news_id)
+
+        if news_post:
+            form = NewsForm(obj=news_post)
+            form.date.data = datetime.utcnow().date()
+            
+            if form.validate_on_submit():
+                try:
+                    # Update news_url if necessary
+                    if form.news_url.data != news_post.news_url:
+                        # Remove the old directory
+                        old_news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_post.news_url)
+                        if os.path.exists(old_news_photos_directory):
+                            shutil.rmtree(old_news_photos_directory)
+
+                        # Create new directory
+                        news_url_safe = secure_filename(form.news_url.data)
+                        news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_safe)
+                        os.makedirs(news_photos_directory, exist_ok=True)
+
+                        # Update news post's news_url
+                        news_post.news_url = news_url_safe
+
+                    # Update the cover image
+                    cover_image = form.cover_image.data
+                    if cover_image:
+                        cover_image_filename = secure_filename(cover_image.filename)
+                        cover_image_path = os.path.join(news_photos_directory, cover_image_filename)
+                        cover_image.save(cover_image_path)
+                        news_post.cover = cover_image_filename
+
+                    # Update the photos
+                    photos = form.photos.data
+                    if photos:
+                        photos_filenames = [secure_filename(photo.filename) for photo in photos]
+
+                        photos_path = []
+                        for i, photo in enumerate(photos):
+                            photo_filename = photos_filenames[i]
+                            photo_path = os.path.join(news_photos_directory, photo_filename)
+                            photo.save(photo_path)
+                            photos_path.append(photo_filename)
+
+                        news_post.photos = ' && '.join(photos_path)
+
+                    # Update other fields
+                    news_post.title_en = form.title_en.data
+                    news_post.title_pt = form.title_pt.data
+                    news_post.summary_en = form.summary_en.data
+                    news_post.summary_pt = form.summary_pt.data
+                    news_post.body_en = form.body_en.data
+                    news_post.body_pt = form.body_pt.data
+                    news_post.photographers = form.photographers.data
+                    news_post.category = form.category.data
+                    news_post.date = form.date.data
+
+                    # Commit changes to the database
+                    db.session.commit()
+
+                    flash('News post updated successfully!', 'success')
+                    return redirect(url_for('news_dashboard'))
+                except Exception as e:
+                    flash(f'Error: {str(e)}', 'danger')
+            
+            # Render the edit news template with the pre-filled form
+            return render_template('edit_news.html', form=form, news_post=news_post)
+        else:
+            flash("News post not found", "error")
+            return redirect(url_for("news_dashboard"))
 
     @app.route("/news")
     def news():
