@@ -35,6 +35,10 @@ header {
     margin: 10px auto;
 }
 
+.nav-item {
+    padding: 4px;
+}
+
 .dropdown-menu {
     background: transparent;
     text-align: center;

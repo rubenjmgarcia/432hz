@@ -76,16 +76,16 @@
 					</a>
 				</div>
 
-				<div class="col-md-8 mb-2 text-md-right">
+				<div class="col-md-8 mb-2 text-md-right text-center">
 					<!-- espaço extra eliminar depois-->
 					<p></br></p>
 					<p class="text-uppercase font-weight-bold mb-1">
-						<a href="/">Sobre Nós</a> | <a href="/">Projetos</a> | <a href="/partners">Parceiros</a> | <a href="/contacts">Contactos</a>
+						<a href="{{ url_for('about') }}">{{ _('SOBRE NÓS') }}</a> | <a href="{{ url_for('projects') }}">{{ _('PROJECTOS') }}</a> | <a href="{{ url_for('partners') }}">{{ _('Parceiros') }}</a> | <a href="/contacts">{{ _('CONTACTOS') }}</a>
 					</p>
 					<p class="mb-2">Rua dos Foros Nº3 1ºDto. | 9500-059 Ponta Delgada</p>
 				</div>
 
-				<div class="col-md-8 mb-2 text-md-right">
+				<div class="col-md-8 mb-2 text-md-right text-center">
 					<a class="social-media transition" title="Facebook" href="{{ url_for('facebook') }}" target="_blank" rel="nofollow noopener"><i class="fab fa-facebook-f fa-fw social-icon social-icon-small"></i></a>
 					<a class="social-media transition ml-1" title="Instagram" href="{{ url_for('instagram') }}" target="_blank" rel="nofollow noopener"><i class="fab fa-instagram fa-fw social-icon social-icon-small"></i></a>
 					<a class="social-media transition ml-1" title="Email" href="{{ url_for('email') }}"><i class="fas fa-envelope fa-fw social-icon social-icon-small"></i></a>

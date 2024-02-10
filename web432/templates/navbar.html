@@ -8,40 +8,43 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav text-center ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('about') }}">SOBRE NÓS</a>
+          <a class="nav-link" href="{{ url_for('about') }}">{{ _('SOBRE NÓS') }}</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjects">
-            PROJECTOS
+            {{ _('PROJECTOS') }}
           </a>
-          <ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdownProjects">
+          <ul class="dropdown-menu justify-content-center" aria-labelledby="navbarDropdownProjects">
             <li><a class="dropdown-item" href="#">PROJECTO 432HZ</a></li>
             <li><a class="dropdown-item" href="#">APRENDER BALEIAS</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{{ url_for('projects') }}">TODOS OS PROJECTOS</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('projects') }}">{{ _('TODOS OS PROJECTOS') }}</a></li>
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('contacts') }}">CONTACTOS</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownLanguage">
-            PT | EN
-          </a>
-          <ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdownLanguage">
-            <li><a class="dropdown-item" href="{{ url_for('set_locale', lang='pt') }}">PT</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('set_locale', lang='en') }}">EN</a></li>
-          </ul>
+          <a class="nav-link" href="{{ url_for('contacts') }}">{{ _('CONTACTOS') }}</a>
         </li>
 
+        <li class="nav-item">
+          <div class="nav-link">
+            {% if session['lang'] == 'pt' %}
+              <a class="text-reset text-decoration-none cursor-default" title="Portuguese" style="font-weight: 600;" aria-disabled="true">PT</a>
+              <a class="" href="{{ url_for('set_locale', lang='en') }}" title="English" aria-label="Go to English Version" style="text-decoration: none; color: inherit;">EN</a>
+            {% elif session['lang'] == 'en' %}
+              <a class="" href="{{ url_for('set_locale', lang='pt') }}" title="Portuguese" aria-label="Ir para versão em Português" style="text-decoration: none; color: inherit;">PT</a>
+              <a class="text-reset text-decoration-none cursor-default" title="English" style="font-weight: 600;" aria-disabled="true">EN</a>
+            {% endif %}
+          </div>
+        </li>           
+        
         {% if current_user.is_authenticated %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin">
               ADMIN
             </a>
-            <ul class="dropdown-menu dropdown-menu-center" aria-labelledby="navbarDropdownAdmin">
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
               <li><a class="dropdown-item" href="{{ url_for('dashboard') }}">DASHBOARD</a></li>
               {% if current_user.role == 'admin' %}
                 <li><hr class="dropdown-divider"></li>
@@ -56,3 +59,4 @@
     </div>
   </div>
 </nav>
+

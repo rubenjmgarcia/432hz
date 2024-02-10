@@ -25,3 +25,56 @@ msgstr "Bem-vindo ao nosso site!"
 #~ msgid "blá blá blá in english"
 #~ msgstr "blá blá blá in Portuguese!"
 
+#~ msgid "SOBRE NÓS"
+#~ msgstr "SOBRE NÓS"
+
+#~ msgid "PROJECTOS"
+#~ msgstr "PROJECTOS"
+
+#~ msgid "TODOS OS PROJECTOS"
+#~ msgstr "TODOS OS PROJECTOS"
+
+#~ msgid "CONTACTOS"
+#~ msgstr "CONTACTOS"
+
+#~ msgid "Encontra-nos no Instagram"
+#~ msgstr "Encontra-nos no Instagram"
+
+#~ msgid ""
+#~ "Está a par daquilo que andamos a"
+#~ " fazer! Segue-nos para acompanhares "
+#~ "os nossos projetos."
+#~ msgstr ""
+#~ "Está a par daquilo que andamos a"
+#~ " fazer! Segue-nos para acompanhares "
+#~ "os nossos projetos."
+
+#~ msgid "Parceiros"
+#~ msgstr "Parceiros"
+
+#~ msgid "Nome"
+#~ msgstr "Nome"
+
+#~ msgid "Endereço de e-mail"
+#~ msgstr "Endereço de e-mail"
+
+#~ msgid "Assunto"
+#~ msgstr "Assunto"
+
+#~ msgid "Mensagem"
+#~ msgstr "Mensagem"
+
+#~ msgid ""
+#~ "Os dados pessoais introduzidos neste "
+#~ "formulário não serão objeto de qualquer"
+#~ " tratamento, servindo única e "
+#~ "exclusivamente para responder ao solicitado."
+#~ msgstr ""
+#~ "Os dados pessoais introduzidos neste "
+#~ "formulário não serão objeto de qualquer"
+#~ " tratamento, servindo única e "
+#~ "exclusivamente para responder ao solicitado."
+
+#~ msgid "Enviar"
+#~ msgstr "Enviar"
+

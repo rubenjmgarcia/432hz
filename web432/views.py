@@ -513,6 +513,10 @@ def register_routes(app, role_required):
     def project_id():
         return render_template('projects_all.html')
 
+    @app.route("/partners")
+    def partners():
+        return render_template('partners.html')
+
     @app.route('/setlocale/<lang>')
     def set_locale(lang):
         session['lang'] = lang

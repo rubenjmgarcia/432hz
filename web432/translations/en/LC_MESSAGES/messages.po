@@ -25,3 +25,56 @@ msgstr "Welcome to our beautiful website!"
 #~ msgid "blá blá blá in english"
 #~ msgstr "blá blá blá in English!"
 
+#~ msgid "SOBRE NÓS"
+#~ msgstr "ABOUT US"
+
+#~ msgid "PROJECTOS"
+#~ msgstr "PROJECTS"
+
+#~ msgid "TODOS OS PROJECTOS"
+#~ msgstr "ALL PROJECTS"
+
+#~ msgid "CONTACTOS"
+#~ msgstr "CONTACTS"
+
+#~ msgid "Encontra-nos no Instagram"
+#~ msgstr "Find us on Instagram"
+
+#~ msgid ""
+#~ "Está a par daquilo que andamos a"
+#~ " fazer! Segue-nos para acompanhares "
+#~ "os nossos projetos."
+#~ msgstr ""
+#~ "Stay up to date with what we're"
+#~ " doing! Follow us to keep up "
+#~ "with our projects."
+
+#~ msgid "Parceiros"
+#~ msgstr "Partners"
+
+#~ msgid "Nome"
+#~ msgstr "Name"
+
+#~ msgid "Endereço de e-mail"
+#~ msgstr "Email Adress"
+
+#~ msgid "Assunto"
+#~ msgstr "Subject"
+
+#~ msgid "Mensagem"
+#~ msgstr "Message"
+
+#~ msgid ""
+#~ "Os dados pessoais introduzidos neste "
+#~ "formulário não serão objeto de qualquer"
+#~ " tratamento, servindo única e "
+#~ "exclusivamente para responder ao solicitado."
+#~ msgstr ""
+#~ "The personal data entered in this "
+#~ "form will not be subject to any"
+#~ " treatment, serving solely and exclusively"
+#~ " to respond to the request."
+
+#~ msgid "Enviar"
+#~ msgstr "Send"
+

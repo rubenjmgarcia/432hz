@@ -12,18 +12,17 @@
 	<section class="row margin-left-1">
 		<article class="col-12 col-md-6 mt-4">
 			<form action="contact" id="contact-form" method="post">
-				<input class="form-control" type="text" name="name" placeholder="Nome" required="">
-				<input class="form-control mt-2 d-none" type="email" name="email" placeholder="Endereço de e-mail">
-				<input class="form-control mt-2" type="email" name="from" placeholder="Endereço de e-mail" required="">
-				<input class="form-control mt-2" type="text" name="subject" placeholder="Assunto" required="">
-				<textarea class="form-control mt-2" name="message" placeholder="Mensagem" cols="30" rows="6" required=""></textarea>
+				<input class="form-control" type="text" name="name" placeholder="{{ _('Nome') }}" required="">
+				<input class="form-control mt-2" type="email" name="email" placeholder="{{ _('Endereço de e-mail') }}" required="">
+				<input class="form-control mt-2" type="text" name="subject" placeholder="{{ _('Assunto') }}" required="">
+				<textarea class="form-control mt-2" name="message" placeholder="{{ _('Mensagem') }}" cols="30" rows="6" required=""></textarea>
 				<div class="row mt-3 no-gutters">
 					<div class="col-sm-8 col-lg-9">
-						<p class="text-muted small text-justify mb-0">Os dados pessoais introduzidos neste formulário não serão objeto de qualquer tratamento, servindo única e exclusivamente para responder ao solicitado.</p>
+						<p class="text-muted small text-justify mb-0">{{ _('Os dados pessoais introduzidos neste formulário não serão objeto de qualquer tratamento, servindo única e exclusivamente para responder ao solicitado.') }}</p>
 					</div>
 					<div class="col">
 						<article class="text-right pr-0 mt-2">
-							<button class="bg-vermelho text-white font-weight-light text-uppercase junta-te" type="submit" name="submit" fdprocessedid="9s4zf">Enviar</button>
+							<button class="btn btn-outline-primary text-uppercase" type="submit" name="submit" fdprocessedid="9s4zf">{{ _('Enviar') }}</button>
 						</article>
 					</div>
 				</div>
@@ -31,9 +30,9 @@
 		</article>
 		
 		<article class="col-12 col-md-6 mt-4 pt-md-2 pl-md-4">
-			<a class="font-weight-light text-left text-body mb-3 d-block" title="E-mail" href="/email" target="_blank" rel="nofollow noopener"><i class="fas fa-at fa-fw social-icon social-icon-small social-icon-dark mr-3 align-middle"></i><span data-nosnippet="">projecto432hz@gmail.com</span></p>
-			<a class="font-weight-light text-left text-body mb-3 d-block" title="Facebook" href="/facebook" target="_blank" rel="nofollow noopener"><i class="fab fa-facebook-f fa-fw social-icon social-icon-small social-icon-dark mr-3 align-middle"></i>facebook.com/projeto432hz</a>
-			<a class="font-weight-light text-left text-body mb-3 d-block" title="Instagram" href="/instagram" target="_blank" rel="nofollow noopener"><i class="fab fa-instagram fa-fw social-icon social-icon-small social-icon-dark mr-3 align-middle"></i>instagram.com/projeto432hz</a>
+			<a class="font-weight-light text-left text-body mb-3 d-block" title="E-mail" href="{{ url_for('email') }}" target="_blank" rel="nofollow noopener"><i class="fas fa-at fa-fw social-icon social-icon-contact social-icon-small social-icon-dark text-dark mr-3 align-middle"></i><span data-nosnippet="">projecto432hz@gmail.com</span></p>
+			<a class="font-weight-light text-left text-body mb-3 d-block" title="Facebook" href="{{ url_for('facebook') }}" target="_blank" rel="nofollow noopener"><i class="fab fa-facebook-f fa-fw social-icon social-icon-contact social-icon-small social-icon-dark text-dark mr-3 align-middle"></i>facebook.com/projeto432hz</a>
+			<a class="font-weight-light text-left text-body mb-3 d-block" title="Instagram" href="{{ url_for('instagram') }}" target="_blank" rel="nofollow noopener"><i class="fab fa-instagram fa-fw social-icon social-icon-contact social-icon-small social-icon-dark text-dark mr-3 align-middle"></i>instagram.com/projeto432hz</a>
 		</article>
 	</section>
 {% endblock %}
