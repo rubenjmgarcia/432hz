@@ -14,8 +14,8 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<th>ID</th>
-				<th>URL</th>
+                <th>URL PT</th>
+                <th>URL EN</th>
 				<th>Title</th>
 				<th>Summary</th>
 				<th>Body</th>
@@ -26,8 +26,8 @@
 		<tbody>
 			{% for post in news_posts %}
 				<tr>
-					<td>{{ post.id }}</td>
-					<td><a href="{{ url_for('news_url', news_url=post.news_url) }}">{{ post.news_url }}</a></td>
+                    <td><a href="{{ url_for('news_url', news_url=post.news_url_pt) }}">{{ post.news_url_pt }}</a></td>
+                    <td><a href="{{ url_for('news_url', news_url=post.news_url_en) }}">{{ post.news_url_en }}</a></td>
 					<td>{{ post.title_en }}</td>
 					<td>{{ post.summary_en | safe }}</td>
 					<td>{{ post.body_en | safe }}</td>

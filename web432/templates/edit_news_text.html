@@ -15,9 +15,16 @@
             {{ form.hidden_tag() }}
 
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">{{ form.news_url.label }}</label>
+                <label class="col-sm-2 col-form-label">{{ form.news_url_pt.label }}</label>
                 <div class="col-sm-10">
-                    {{ form.news_url(class="form-control", value=news_post.news_url) }}
+                    {{ form.news_url_pt(class="form-control", value=news_post.news_url_pt) }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">{{ form.news_url_en.label }}</label>
+                <div class="col-sm-10">
+                    {{ form.news_url_en(class="form-control", value=news_post.news_url_en) }}
                 </div>
             </div>
 

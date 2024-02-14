@@ -24,9 +24,6 @@
 		<!-- Font Awesome -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 
-		<!-- Animate -->
-		<link rel="stylesheet" href="/css/animate.min.css">
-		
 		<meta name="theme-color" content="#ffffff">
 
 		<!-- My Stylesheets -->
@@ -50,9 +47,12 @@
 	</head>
 	<body>
 		<header>
+			<!-- Loader -->
+
 			<div class="loading">
 				<img class="animated pulse infinite slow loading-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="A carregar">
 			</div>
+
 			<!-- Navbar -->
 			{% include 'navbar.html' %}
 		</header>
@@ -88,7 +88,10 @@
 					<!-- espaço extra eliminar depois-->
 					<p></br></p>
 					<p class="text-uppercase font-weight-bold mb-1">
-						<a href="{{ url_for('about') }}">{{ _('SOBRE NÓS') }}</a> | <a href="{{ url_for('projects') }}">{{ _('PROJECTOS') }}</a> | <a href="{{ url_for('partners') }}">{{ _('Parceiros') }}</a> | <a href="/contacts">{{ _('CONTACTOS') }}</a>
+						<a href="{% if session['lang'] == 'pt' %}{{ url_for('sobre') }}{% else %}{{ url_for('about') }}{% endif %}">{{ _('SOBRE NÓS') }}</a> | 
+						<a href="{{ url_for('projects') }}">{{ _('PROJECTOS') }}</a> | 
+						<a href="{{ url_for('partners') }}">{{ _('Parceiros') }}</a> | 
+						<a href="{% if session['lang'] == 'pt' %}{{ url_for('contactos') }}{% else %}{{ url_for('contacts') }}{% endif %}">{{ _('CONTACTOS') }}</a>
 					</p>
 					<p class="mb-2">Rua dos Foros Nº3 1ºDto. | 9500-059 Ponta Delgada</p>
 				</div>
@@ -119,7 +122,8 @@
 		<!-- CKEditor -->
 		<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
-		<script src="static/scripts/global.js"></script>
+		<script src="{{ url_for('static', filename='scripts/global.js') }}"></script>
+
 		{% block pagescripts %}{% endblock %}
 	</body>
 </html>

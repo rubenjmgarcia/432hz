@@ -25,7 +25,8 @@ class ChangePasswordForm(FlaskForm):
     submit = SubmitField('Change Password')
 
 class NewsForm(FlaskForm):
-    news_url = StringField('News URL', validators=[DataRequired()])
+    news_url_en = StringField('News URL (EN)', validators=[DataRequired()])
+    news_url_pt = StringField('News URL (PT)', validators=[DataRequired()])
     title_pt = StringField('Title (PT)', validators=[DataRequired()])
     title_en = StringField('Title (EN)', validators=[DataRequired()])
     summary_pt = CKEditorField('Summary (PT)', validators=[DataRequired()])
@@ -40,7 +41,8 @@ class NewsForm(FlaskForm):
     submit = SubmitField('Create News Post')
 
 class NewsFormText(FlaskForm):
-    news_url = StringField('News URL', validators=[DataRequired()])
+    news_url_en = StringField('News URL (EN)', validators=[DataRequired()])
+    news_url_pt = StringField('News URL (PT)', validators=[DataRequired()])
     title_pt = StringField('Title (PT)', validators=[DataRequired()])
     title_en = StringField('Title (EN)', validators=[DataRequired()])
     summary_pt = CKEditorField('Summary (PT)', validators=[DataRequired()])

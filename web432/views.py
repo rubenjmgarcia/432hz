@@ -31,11 +31,27 @@ def register_routes(app, role_required):
 
     @app.route('/contacts')
     def contacts():
-        return render_template("contacts.html")
+        session['lang'] = "en"
+        translation = url_for('contactos')
+        return render_template("contacts.html", translation=translation)
+
+    @app.route('/contactos')
+    def contactos():
+        session['lang'] = "pt"
+        translation = url_for('contacts')
+        return render_template("contacts.html", translation=translation)
 
     @app.route('/about')
     def about():
-        return render_template("about.html")
+        session['lang'] = "en"
+        translation = url_for('sobre')
+        return render_template("about.html", translation=translation)
+
+    @app.route('/sobre')
+    def sobre():
+        session['lang'] = "pt"
+        translation = url_for('about')
+        return render_template("about.html", translation=translation)
 
     @app.route('/facebook')
     def facebook():
@@ -250,10 +266,11 @@ def register_routes(app, role_required):
         if form.validate_on_submit():
             try:
                 # Convert news_url to file-safe name
-                news_url_safe = secure_filename(form.news_url.data)
+                news_url_pt_safe = secure_filename(form.news_url_pt.data)
+                news_url_en_safe = secure_filename(form.news_url_en.data)
 
                 #make the news photo directory
-                news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_safe)
+                news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_en_safe)
                 os.makedirs(news_photos_directory, exist_ok=True)
 
                 # Save the cover image
@@ -275,7 +292,8 @@ def register_routes(app, role_required):
 
                 # Create a new News post
                 new_post = News(
-                    news_url=news_url_safe,
+                    news_url_en=news_url_en_safe,
+                    news_url_pt=news_url_pt_safe,
                     title_en=form.title_en.data,
                     title_pt=form.title_pt.data,
                     summary_en=form.summary_en.data,
@@ -319,7 +337,7 @@ def register_routes(app, role_required):
             db.session.commit()
             
             # Delete the directory containing the news photos
-            news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_post.news_url)
+            news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_post.news_url_en)
             if os.path.exists(news_photos_directory):
                 shutil.rmtree(news_photos_directory)
             
@@ -343,19 +361,19 @@ def register_routes(app, role_required):
             if form.validate_on_submit():
                 try:
                     # Update news_url if necessary
-                    if form.news_url.data != news_post.news_url:
+                    if form.news_url_en.data != news_post.news_url_en:
                         # Remove the old directory
-                        old_news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_post.news_url)
+                        old_news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_post.news_url_en)
                         if os.path.exists(old_news_photos_directory):
                             shutil.rmtree(old_news_photos_directory)
 
                         # Create new directory
-                        news_url_safe = secure_filename(form.news_url.data)
-                        news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_safe)
+                        news_url_en_safe = secure_filename(form.news_url_en.data)
+                        news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_en_safe)
                         os.makedirs(news_photos_directory, exist_ok=True)
 
                         # Update news post's news_url
-                        news_post.news_url = news_url_safe
+                        news_post.news_url_en = news_url_safe_en
 
                     # Update the cover image
                     cover_image = form.cover_image.data
@@ -380,6 +398,7 @@ def register_routes(app, role_required):
                         news_post.photos = ' && '.join(photos_path)
 
                     # Update other fields
+                    news_post.news_url_pt = secure_filename(form.news_url_pt.data)
                     news_post.title_en = form.title_en.data
                     news_post.title_pt = form.title_pt.data
                     news_post.summary_en = form.summary_en.data
@@ -418,6 +437,7 @@ def register_routes(app, role_required):
         if form.validate_on_submit():
             try:
                 # Update text content fields
+                news_post.news_url_pt = secure_filename(form.news_url_pt.data)
                 news_post.title_pt = form.title_pt.data
                 news_post.title_en = form.title_en.data
                 news_post.summary_pt = form.summary_pt.data
@@ -428,16 +448,16 @@ def register_routes(app, role_required):
                 news_post.date = form.date.data
 
                 # Check if news_url has changed
-                if form.news_url.data != news_post.news_url:
-                    old_news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_post.news_url)
+                if form.news_url_en.data != news_post.news_url_en:
+                    old_news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_post.news_url_en)
                     if os.path.exists(old_news_photos_directory):
                         # Create new directory
-                        news_url_safe = secure_filename(form.news_url.data)
-                        news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_safe)
+                        news_url_en_safe = secure_filename(form.news_url_en.data)
+                        news_photos_directory = os.path.join(app.config['UPLOAD_DIRECTORY'], news_url_en_safe)
                         os.makedirs(news_photos_directory, exist_ok=True)
 
                         # Update news post's news_url
-                        news_post.news_url = news_url_safe
+                        news_post.news_url_en = news_url_en_safe
 
                         # Move photos to new directory
                         for filename in os.listdir(old_news_photos_directory):
@@ -481,7 +501,14 @@ def register_routes(app, role_required):
     @app.route("/news/<news_url>")
     def news_url(news_url):
         # Fetch the news post based on the news_url
-        news_post = News.query.filter_by(news_url=news_url).first()
+        if News.query.filter_by(news_url_pt=news_url).first():
+            session['lang'] = "pt"
+            news_post = News.query.filter_by(news_url_pt=news_url).first()
+            translation = url_for('news_url', news_url=news_post.news_url_en)
+        elif News.query.filter_by(news_url_en=news_url).first():
+            session['lang'] = "en"
+            news_post = News.query.filter_by(news_url_en=news_url).first()
+            translation = url_for('news_url', news_url=news_post.news_url_pt)
 
         # Check if the news post exists
         if not news_post:
@@ -498,7 +525,7 @@ def register_routes(app, role_required):
         # Split photos string into a list
         photos_list = news_post.photos.split(' && ')
 
-        return render_template('news.html', news_post=news_post, author=author, photos_list=photos_list)
+        return render_template('news.html', news_post=news_post, author=author, photos_list=photos_list, translation=translation)
 
     @app.route("/create_project")
     @login_required

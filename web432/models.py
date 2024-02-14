@@ -15,7 +15,8 @@ class Users(db.Model, UserMixin):
 
 class News(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    news_url = db.Column(db.String(255), unique=True, nullable=False)
+    news_url_en = db.Column(db.String(255), unique=True, nullable=False)
+    news_url_pt = db.Column(db.String(255), unique=True, nullable=False)
     status = db.Column(db.String(20), default='draft')
     title_en = db.Column(db.String(255), unique=True, nullable=False)
     title_pt = db.Column(db.String(255), unique=True, nullable=False)

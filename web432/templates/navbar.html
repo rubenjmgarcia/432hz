@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav text-center ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('about') }}">{{ _('SOBRE NÓS') }}</a>
+          <a class="nav-link" href="{% if session['lang'] == 'pt' %}{{ url_for('sobre') }}{% else %}{{ url_for('about') }}{% endif %}">{{ _('SOBRE NÓS') }}</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjects">
@@ -24,16 +24,16 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('contacts') }}">{{ _('CONTACTOS') }}</a>
+          <a class="nav-link" href="{% if session['lang'] == 'pt' %}{{ url_for('contactos') }}{% else %}{{ url_for('contacts') }}{% endif %}">{{ _('CONTACTOS') }}</a>
         </li>
 
         <li class="nav-item">
           <div class="nav-link">
             {% if session['lang'] == 'pt' %}
               <a class="text-reset text-decoration-none cursor-default" title="Portuguese" style="font-weight: 600;" aria-disabled="true">PT</a>
-              <a class="" href="{{ url_for('set_locale', lang='en') }}" title="English" aria-label="Go to English Version" style="text-decoration: none; color: inherit;">EN</a>
+              <a class="" href="{% if translation %}{{ translation }}{% else %}{{ url_for('set_locale', lang='en') }}{% endif %}" title="English" aria-label="Go to English Version" style="text-decoration: none; color: inherit;">EN</a>
             {% elif session['lang'] == 'en' %}
-              <a class="" href="{{ url_for('set_locale', lang='pt') }}" title="Portuguese" aria-label="Ir para versão em Português" style="text-decoration: none; color: inherit;">PT</a>
+              <a class="" href="{% if translation %}{{ translation }}{% else %}{{ url_for('set_locale', lang='pt') }}{% endif %}" title="Portuguese" aria-label="Ir para versão em Português" style="text-decoration: none; color: inherit;">PT</a>
               <a class="text-reset text-decoration-none cursor-default" title="English" style="font-weight: 600;" aria-disabled="true">EN</a>
             {% endif %}
           </div>
