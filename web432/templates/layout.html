@@ -46,7 +46,7 @@
 		
 	</head>
 	<body>
-		<header>
+		<header id="top" class="container-fluid">
 			<!-- Loader -->
 
 			<div class="loading">
@@ -56,7 +56,7 @@
 			<!-- Navbar -->
 			{% include 'navbar.html' %}
 		</header>
-		<main class="container-fluid">
+		<main class="container-fluid mr-0 ml-0">
 			<!-- Flash Alerts -->
 			{% with messages = get_flashed_messages(with_categories=true) %}
 				{% if messages %}
@@ -75,7 +75,6 @@
 		</main>
 		<footer>
 			<section>
-				
 				<div class="position-relative text-center pb-1" style="top: 2rem; z-index: 1001;">
 					<a href="#" id="go-to-top" data-toggle="tooltip" data-placement="bottom" title="Voltar para o topo">
 						<span class="bg-cinzento4 rounded-circle d-inline-block" style="font-size: 1.5rem; line-height: 2.5rem; width: 3rem; height: 3rem;">
@@ -123,6 +122,7 @@
 		<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
 		<script src="{{ url_for('static', filename='scripts/global.js') }}"></script>
+		<script src="{{ url_for('static', filename='scripts/parallax.js') }}"></script>
 
 		{% block pagescripts %}{% endblock %}
 	</body>

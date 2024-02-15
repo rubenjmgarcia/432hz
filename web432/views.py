@@ -27,7 +27,8 @@ def register_routes(app, role_required):
     @app.route('/index')
     @app.route('/')
     def index():
-        return render_template("index.html")
+        all_news = News.query.all()
+        return render_template("index.html", news_post=all_news)
 
     @app.route('/contacts')
     def contacts():

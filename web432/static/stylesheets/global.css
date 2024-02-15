@@ -43,6 +43,129 @@
     transform: scale(2);
 }
 
+/********ALIGNMENT*********************/
+
+.padding-left-1{
+    padding-left: 15px;
+}
+
+@media (min-width: 900px){
+    .margin-left-1{
+        margin: 0 12vw 0 12vw;
+    }
+}
+
+@media (max-width: 899.98px){
+    .margin-left-1{
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+.margin-top-2{
+    margin-top: 7vh;
+}
+
+.margin-top-3{
+    margin-top: 25vh;
+}
+
+.text-justify{
+    -moz-text-align-last: initial;
+    text-align-last: initial;
+}
+
+.text-justify-center{
+    text-align: justify !important;
+    -moz-text-align-last: center;
+    text-align-last: center;
+}
+
+@media (min-width: 576px){
+    .text-sm-justify{
+        text-align: justify !important;
+        -moz-text-align-last: initial;
+        text-align-last: initial;
+    }
+}
+@media (min-width: 768px){
+    .text-md-justify{
+        text-align: justify !important;
+        -moz-text-align-last: initial;
+        text-align-last: initial;
+    }
+}
+@media (min-width: 992px){
+    .text-lg-justify{
+        text-align: justify !important;
+        -moz-text-align-last: initial;
+        text-align-last: initial;
+    }
+}
+@media (min-width: 1200px){
+    .text-xl-justify{
+        text-align: justify !important;
+        -moz-text-align-last: initial;
+        text-align-last: initial;
+    }
+}
+
+/*************PARALLAX****************/
+.header-container{
+    height: 100vh;
+    background-image: url('/static/images/home-header.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.separator-container{
+    height: 50vh;
+}
+.media-container{
+    height: 40vh;
+}
+@media (min-width: 900px){
+    .media-container{
+        height: 80vh;
+    }
+}
+.parallax__container{
+	clip: rect(0, auto, auto, 0);
+	height: 100%;
+	left: 0;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: -100;
+	background-color: #000;
+}
+.parallax__container .parallax{
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	position: fixed;
+	top: 0;
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+    width: 100%;
+}
+.header-container .parallax__container .parallax, .video-background .video-wrap #video{
+    -webkit-filter: brightness(0.8);
+	filter: brightness(0.8);
+}
+.old_parallax{
+    background-image: url("/img/sandbox.jpg");
+    background-color: black;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+
 /*************HEADER*****************/
 header {
     padding: 0 15px;
@@ -91,11 +214,41 @@ header {
     }
 }
 
+@media (max-width: 767px) {
+    .navbar-collapse {
+        text-align: center; /* Align the links to the center */
+    }
+
+    .navbar-nav {
+        display: inline-block; /* Display the navbar items inline */
+        float: none; /* Remove float */
+    }
+
+    .navbar-nav .nav-item.dropdown {
+        display: block; /* Display dropdown items as blocks */
+        text-align: center; /* Align dropdown items to the left */
+        position: static; /* Remove position: relative */
+    }
+
+    .navbar-nav .nav-item.dropdown .dropdown-menu {
+        margin-top: 0; /* Remove top margin */
+        transform: translate(0, 0); /* Remove horizontal translation */
+        left: 0; /* Align the dropdown menu to the left */
+        display: none; /* Hide the dropdown menu */
+        position: static; /* Remove absolute positioning */
+        opacity: 1; /* Set opacity to 1 */
+        transition: none; /* Remove transition */
+    }
+
+    .navbar-nav .nav-item.dropdown:hover .dropdown-menu {
+        display: none; /* Hide the dropdown menu on hover */
+    }
+}
+
 /* Custom styles for the dropdown menu */
 .navbar-nav .nav-item.dropdown:hover .dropdown-menu {
     display: block;
     opacity: 1;
-    transform: translate(-50%, 0) scaleY(1);
     transition: opacity 0.3s, transform 0.3s;
 }
 

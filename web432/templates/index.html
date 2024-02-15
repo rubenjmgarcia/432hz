@@ -9,13 +9,43 @@
 {% endblock %}
 
 {% block main %}
-  <section id="section1" class="logo">
-    <h3>{{ _('Welcome to our website!') }}</h3>
-    {{ _('Current Language: ') + session['lang'] }}
-    <img src="{{ url_for('static', filename='images/logo.png') }}" width="100%">
-  </section>
+<section class="row header-container padding-left-1">
+  <article class="mb-0 pb-0 col-12" style="height: 0!important;">
+      <div class="pos-camara">
+          <div class="bg-cinzento2 pt-1 pb-1 pr-2 pl-2">
+              <span class="mb-0 pb-0 text-white fas fa-camera" data-toggle="collapse" data-target="#copyright" style="cursor: pointer;"></span>
+              <small class="collapse text-white font-italic ml-2" id="copyright">André Mendes</small>
+          </div>
+      </div>
+  </article>
+  
+  <article class="col-xl-4 col-lg-6 col-md-8 col-12 margin-left-1 margin-top-2 animated wow fadeInLeft">
+      <p class="header1">A promover a cidadania ativa</p>
+      <p class="text-1">Questionamos paradigmas, mudamos mentalidades e, mais importante, atuamos na comunidade!</p>
+      <button id="go-to-news" class="bg-primary text-white font-weight-light text-uppercase junta-te">Descobre as últimas notícias</button>
+  </article>
+  
+          
+  <article class="col-12 text-center">
+      <a id="go-to-section1" href="#section1" class="d-none d-md-inline-block transition"><img class="scroll-icon" width="40" src="{{ url_for('static', filename='images/logo.png') }}" alt="Deslizar para o conteúdo principal"></a>
+      <article class="social-container col-12 d-none d-md-block animated wow fadeInRight">
+          <a class="transition" title="Facebook" href="{{ url_for('facebook') }}" target="_blank" rel="nofollow noopener"><i class="fab fa-facebook-f fa-fw social-icon social-icon-dark text-dark"></i></a>
+          <a class="transition" title="Instagram" href="{{ url_for('instagram') }}" target="_blank" rel="nofollow noopener"><i class="fab fa-instagram fa-fw social-icon social-icon-dark text-dark"></i></a>
+          <a class="transition" title="Email" href="{{ url_for('email') }}" target="_blank" rel="nofollow noopener"><i class="fas fa-envelope fa-fw social-icon social-icon-dark text-dark"></i></a>
+      </article>
+  </article>
+ </section>
 
-  <section id="section2" class="row instagram-widget-container">
+  <section id="section1" class="row margin-left-1">
+    <article class="col-12 pt-3 pb-2 text-center">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="" width="280">
+        <p class="header2 text-center">Faz a mudança acontecer</p>
+        <p class="font-weight-light">A <span class="font-weight-bold">432Hz</span> é uma associação de jovens que trabalha na promoção da cidadania ativa e participativa. Acreditamos que para que as mudanças ocorram, temos que as fazer acontecer. Questionamos paradigmas, mudamos mentalidades e, mais importante, atuamos na comunidade.  </p>
+        <a href="{{ url_for('projects') }}"><button class="bg-primary text-white font-weight-light text-uppercase junta-te" fdprocessedid="ht0fmv">Os nossos projetos</button></a>
+    </article>
+</section>
+
+  <section id="section2" class="row instagram-widget-container margin-left-1 mt-5">
     <article class="col-12 col-lg-6 col-md-6 col-sm-6 pl-0 pr-4">
       <!-- LightWidget WIDGET -->
       <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
@@ -28,5 +58,49 @@
     </article>
   </section>
 
+  <section id="news-section" class="row margin-left-1 pt-5">
+    <article class="col-12">
+        <p class="header2 mb-1">Descobre as últimas da 432Hz</p>
+        <p class="font-weight-light">Dá uma vista de olhos às nossas notícias. Podes filtrar as notícias por área de atuação.</p>
+    </article>
+    <!-- Filtros -->
+    <!-- 
+    <article class="row no-gutters col-12 justify-content-center my-2">
+      <a class="filter-link transition" href="#" role="button" data-toggle="tooltip" data-delay="100" title="Desenvolvimento Sustentável" data-filter="ds" aria-pressed="false">
+          <span class="sr-only">Filtrar por Desenvolvimento Sustentável</span>
+          <img class="filter-icon" src="/img/projects/ai_ds.png" width="45" height="45" alt="" style="padding: 8px 7px 8px 9px;">
+      </a>
+      <a class="filter-link transition" href="#" role="button" data-toggle="tooltip" data-delay="100" title="Inclusão e Sensibilização Social" data-filter="iss" aria-pressed="false">
+          <span class="sr-only">Filtrar por Inclusão e Sensibilização Social</span>
+          <img class="filter-icon" src="/img/projects/ai_iss.png" width="45" height="45" alt="" style="padding: 10px 8px 6px 8px;">
+      </a>
+   </article>
+   -->
+  </section>
 
+  <section class="row no-gutters mt-4 mb-4 justify-content-center">
+    <!-- Loop Notícias -->
+    {% for post in news_post %}
+      <article class="col-xl-3 col-md-6 col-sm-6 col-12 animated fadeIn news cac ds iss iu"> <!-- Filtros "cac ds iss iu" -->
+        <div class="hovereffect" id="{{ post.ID }}">
+          <img class="img-fluid" src="{{ url_for('serve_image', subpath=post.news_url_en if post.news_url_en else '', filename=post.cover if post.cover else '') }}" loading="lazy" alt="">
+          <a class="ver-noticia" href="{% if session['lang'] == 'pt' %}{{ url_for('news_url', news_url=post.news_url_pt) }}{% else %}{{ url_for('news_url', news_url=post.news_url_en) }}{% endif %}">
+          <div class="overlay">
+              <p class="titulo-noticia">{% if session['lang'] == 'pt' %}{{ post.title_pt | safe }}{% else %}{{ post.title_en | safe }}{% endif %}</p>
+              <p class="subtitulo-noticia">{% if session['lang'] == 'pt' %}{{ post.summary_pt | safe }}{% else %}{{ post.summary_en | safe }}{% endif %}</p>
+              <p class="data-noticia">{{ post.date.strftime('%d/%m/%Y') }}</p>
+          </div>
+          </a>
+        </div>
+      </article>
+    {% endfor %}
+    <div id="loadMore" class="d-flex justify-content-center">
+      <button class="bg-primary text-white font-weight-light text-uppercase junta-te mt-5 mb-4">Mostrar mais notícias</button>
+    </div>
+  </section>
+
+{% endblock %}
+
+{% block pagescripts %}
+  <script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
 {% endblock %}
