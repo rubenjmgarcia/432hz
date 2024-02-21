@@ -9,11 +9,16 @@
 {% endblock %}
 
 {% block pagecss %}
-	<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/dashboard.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/news.css') }}">
 {% endblock %}
 
 {% block main %}
-	<section class="row media-container" style="position: relative;">
+
+
+
+
+
+	<section class="row media-container">
 		{# Cover Image #}
         <div><img src="{{ url_for('serve_image', subpath=news_post.news_url_en if news_post.news_url_en else '', filename=news_post.cover if news_post.cover else '') }}" width="250px"></div>
     </section>
@@ -43,43 +48,74 @@
 		</p>
 
 		{# Photos Carrossel #}
-		<div id="news-carousel" class="carousel slide mt-5" data-bs-ride="carousel">
+		<div id="news-images" class="carousel slide mt-5" data-bs-ride="carousel" data-bs-interval="5000">
 			<div class="carousel-indicators">
 				{% for photo in photos_list %}
-				<button type="button" data-bs-target="#news-carousel" data-bs-slide-to="{{ loop.index }}" {% if loop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ loop.index }}"></button>
+			  		<button type="button" data-bs-target="#news-images" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active"{% endif %} aria-current="true" aria-label="Slide {{ loop.index0 }}"></button>
 				{% endfor %}
 			</div>
-		
 			<div class="carousel-inner">
 				{% for photo in photos_list %}
-				<div class="carousel-item {% if loop.index == 1 %}active{% endif %} c-item">
-					<img src="{{ url_for('serve_image', subpath=news_post.news_url_en if news_post.news_url_en else '', filename=photo) }}" class="d-block w-100 c-img" alt="Slide {{ loop.index }}">
-				</div>
+				<div class="normal-carousel carousel-item {% if loop.first %}active{% endif %}">
+					<div class="row justify-content-center align-items-center">
+						<article class="col-10 text-center">
+							<img src="{{ url_for('serve_image', subpath=news_post.news_url_en if news_post.news_url_en else '', filename=photo) }}" class="d-block w-100" alt="...">
+						</article>
+					</div>
+				  </div>
 				{% endfor %}
-			<button class="carousel-control-prev" type="button" data-bs-target="#news-carousel" data-bs-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Previous</span>
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#news-images" data-bs-slide="prev">
+				<img src="{{ url_for('static', filename='images/arrow.png') }}" alt="Anterior" width="20" style="-webkit-transform: scaleX(-1);transform: scaleX(-1);position: absolute;left: 0;">
 			</button>
-			<button class="carousel-control-next" type="button" data-bs-target="#news-carousel" data-bs-slide="next">
-			<span class="carousel-control-next-icon" aria-hidden="true"></span>
-			<span class="visually-hidden">Next</span>
+			<button class="carousel-control-next" type="button" data-bs-target="#news-images" data-bs-slide="next">
+				<img src="{{ url_for('static', filename='images/arrow.png') }}" alt="Seguinte" width="20" style="position: absolute;right: 0;">
 			</button>
 		</div>
+		
 		<p>&copy; {{ news_post.photographers }}</p>
 
-		{# Body #}
-		{% if session['lang'] == 'en' %}
-			{{ news_post.body_en | safe }}
-		{% else %}
-			{{ news_post.body_pt | safe }}
-		{% endif %}
 
-		{# Author and Date #}
-		<div class="mt-5 ml-2">                  
-			<img src="{{ url_for('serve_image', subpath=author.photo.split('/')[0] if author.photo else '', filename=author.photo.split('/')[-1] if author.photo else '') }}" loading="lazy" alt="" width="80" height="80" class="avatar mr-4">
-			<div class="d-inline-block align-middle">
-				<p title="Autor" class="header2 mb-0" style="text-transform: initial;font-size: 1.05rem;">{{ author.name }}</p>
-				<p title="Data de publicação" class="font-weight-light text-muted mb-0" style="font-size: 1rem;"><i class="far fa-clock mr-2"></i><time datetime="{{ news_post.date.strftime('%Y-%m-%d') }}">{{ news_post.date.strftime('%Y-%m-%d') }}</time></p>
+		{# Body #}
+		<div class="row mb-5 mt-0 align-items-start justify-content-between">
+			<div class="col-lg-12 mb-2 mt-5">
+				<div id="news_body" style="font-size:1.05rem;" class="font-weight-light text-justify">
+					{% if session['lang'] == 'en' %}
+						{{ news_post.body_en | safe }}
+					{% else %}
+						{{ news_post.body_pt | safe }}
+					{% endif %}
+				</div>
+
+				{# Author and Date #}
+				<div class="mt-5 ml-2">                  
+					<img src="{{ url_for('serve_image', subpath=author.photo.split('/')[0] if author.photo else '', filename=author.photo.split('/')[-1] if author.photo else '') }}" loading="lazy" alt="" width="80" height="80" class="avatar mr-4">
+					<div class="d-inline-block align-middle">
+						<p title="Autor" class="header2 mb-0" style="text-transform: initial;font-size: 1.05rem;">{{ author.name }}</p>
+						<p title="Data de publicação" class="font-weight-light text-muted mb-0" style="font-size: 1rem;"><i class="far fa-clock mr-2"></i><time datetime="{{ news_post.date.strftime('%Y-%m-%d') }}">{{ news_post.date.strftime('%Y-%m-%d') }}</time></p>
+					</div>
+				</div>
+				<div class="row mb-2 mt-5 mx-sm-3 mx-4 justify-content-center justify-content-sm-start">
+					<a class="transition mb-2" href="https://www.facebook.com/sharer/sharer.php?u=https://432hz.pt/{% if session['lang'] == 'pt' %}{{ news_post.news_url_pt }}{% else %}{{ news_post.news_url_en }}{% endif %}" data-toggle="tooltip" title="" target="_blank" rel="nofollow noopener" data-original-title="Partilhar no Facebook">
+						<i class="fab fa-facebook-f fa-fw social-icon social-icon-small social-icon-dark"></i>
+					</a>
+					<a class="transition ml-2 mb-2" href="https://twitter.com/intent/tweet?text={% if session['lang'] == 'en' %}{{ news_post.title_en }} | 432Hz{% else %}{{ news_post.title_pt }} | 432Hz{% endif %}&amp;url=https://432hz.pt/{% if session['lang'] == 'pt' %}{{ news_post.news_url_pt }}{% else %}{{ news_post.news_url_en }}{% endif %}&amp;hashtags=432Hz" data-toggle="tooltip" title="" target="_blank" rel="nofollow noopener" data-original-title="Partilhar no X (Twitter)">
+						<i class="fab fa-fw social-icon social-icon-small social-icon-dark">
+							<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"></path></svg>
+						</i>
+					</a>
+					<a class="transition ml-2 mb-2" href="https://www.linkedin.com/sharing/share-offsite/?url=https://432hz.pt/{% if session['lang'] == 'pt' %}{{ news_post.news_url_pt }}{% else %}{{ news_post.news_url_en }}{% endif %}" data-toggle="tooltip" title="" target="_blank" rel="nofollow noopener" data-original-title="Partilhar no LinkedIn">
+						<i class="fab fa-linkedin-in fa-fw social-icon social-icon-small social-icon-dark"></i>
+					</a>
+					<a class="transition ml-2 mb-2 d-sm-none" href="whatsapp://send?text=https://432hz.pt/{% if session['lang'] == 'pt' %}{{ news_post.news_url_pt }}{% else %}{{ news_post.news_url_en }}{% endif %}%20%0ahttps://432hz.pt/{% if session['lang'] == 'pt' %}{{ news_post.news_url_pt }}{% else %}{{ news_post.news_url_en }}{% endif %}" data-toggle="tooltip" title="" target="_self" rel="nofollow noopener noreferrer" data-original-title="Partilhar no WhatsApp">
+						<i class="fab fa-whatsapp fa-fw social-icon social-icon-small social-icon-dark"></i>                               </a>
+					<a class="transition ml-2 mb-2" href="mailto:?subject={% if session['lang'] == 'en' %}{{ news_post.title_en }} | 432Hz{% else %}{{ news_post.title_pt }} | 432Hz{% endif %}&amp;body=https://432hz.pt/{% if session['lang'] == 'pt' %}{{ news_post.news_url_pt }}{% else %}{{ news_post.news_url_en }}{% endif %}" data-toggle="tooltip" title="" target="_self" rel="nofollow noopener noreferrer" data-original-title="Partilhar por email">
+						<i class="fas fa-envelope fa-fw social-icon social-icon-small social-icon-dark"></i>
+					</a>
+					<a class="transition ml-2 mb-2" href="javascript:copy_url();" data-toggle="tooltip" title="" id="copy-url" data-original-title="Copiar link">
+						<i class="fas fa-link fa-fw social-icon social-icon-small social-icon-dark"></i>
+					</a>
+				</div>
 			</div>
 		</div>
 	</section>
